@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>黑娃游戏站</title>
+    <link rel="icon" href="网站LOGO.png" type="image/png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+
+        body {
+            background: linear-gradient(180deg, #7b2cb3 0%, #ffc832 100%);
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 20px;
+        }
+
+        /* 顶部左边 LOGO 图标 */
+        .logo-img {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            border: 3px solid #00d4ff;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.6);
+            background: #1a73e8;
+        }
+
+        .header-title {
+            font-size: 80px;
+            font-weight: 900;
+            color: #000;
+            letter-spacing: 10px;
+        }
+
+        .game-list-container {
+            border: 3px dashed #000;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .list-header {
+            background: linear-gradient(90deg, #c7ffd8 0%, #a0c8ff 100%);
+            text-align: center;
+            padding: 15px;
+        }
+
+        .list-header h2 {
+            font-size: 36px;
+            font-weight: bold;
+            color: #000;
+        }
+
+        .game-item {
+            background-color: #d3c7cb;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 30px;
+            margin: 10px;
+            border-radius: 4px;
+        }
+
+        .game-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* 游戏图标 */
+        .game-icon-img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            background: #1a1a1a;
+            padding: 5px;
+        }
+
+        .game-text h3 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .game-details {
+            font-size: 24px;
+            color: #000;
+        }
+
+        .download-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 18px 35px;
+            font-size: 28px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .download-icon {
+            width: 35px;
+            height: 35px;
+            border: 3px solid white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .footer-text {
+            text-align: center;
+            margin: 40px 0 20px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #000;
+        }
+
+        .contact-info {
+            text-align: center;
+            font-size: 16px;
+            color: #000;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 顶部标题区域 -->
+        <div class="header">
+            <!-- 左边 LOGO：黑娃游戏.png -->
+            <img src="网站LOGO.png" class="logo-img" alt="网站LOGO">
+            <h1 class="header-title">黑 娃 游 戏 站</h1>
+        </div>
+
+        <!-- 游戏列表区域 -->
+        <div class="game-list-container">
+            <div class="list-header">
+                <h2>游戏列表</h2>
+            </div>
+
+            <!-- 游戏条目 -->
+            <div class="game-item">
+                <div class="game-info">
+                    <!-- 游戏图标：游戏图标1.PNG -->
+                    <img src="游戏图标1.PNG" class="game-icon-img" alt="游戏图标">
+                    
+                    <div class="game-text">
+                        <h3>1. 小小梦魇2 · 原版资源下载</h3>
+                        <div class="game-details">
+                            大小：3.6G &nbsp;&nbsp;【动作冒险】【解密游戏】
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 核心修改：添加onclick事件实现跳转 -->
+                <button class="download-btn" onclick="window.location.href='https://1859015095.share.123865.com/123pan/Gl4cvd-gradH?pwd=1256#'">
+                    <span class="download-icon">↓</span>
+                    本地下载
+                </button>
+            </div>
+        </div>
+
+        <!-- 底部文字 -->
+        <div class="footer-text">
+            ————————更多游戏待更新，敬请期待！————————
+        </div>
+
+        <!-- 联系方式 -->
+        <div class="contact-info">
+            <p>联系方式：</p>
+            <p>QQ号：3868093996；</p>
+            <p>快手号：heiwa126126.</p>
+        </div>
+    </div>
+</body>
+</html>
