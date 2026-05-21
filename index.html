@@ -2,9 +2,14 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 添加移动端强制电脑端视图的meta标签 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <title>黑娃游戏站</title>
     <meta name="msvalidate.01" content="5B23699F03AA1F311190C1AD97346912" />
+    <!-- 添加SEO友好的网站描述元标签 -->
+    <meta name="description" content="黑娃游戏站，专门提供任何稀缺的游戏资源，让大家方便下载。还能通过联系作者说明需要的文件，作者会挨个认真收看每一条评论并尽力去弄到！希望得到大家的支持，谢谢！">
     <link rel="icon" href="网站LOGO.png" type="image/png">
     <style>
         * {
@@ -51,10 +56,25 @@
             letter-spacing: 10px;
         }
 
+        /* 新增网站介绍样式（保持视觉协调） */
+        .site-intro {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 0 0 20px 0;
+            font-size: 24px;
+            color: #000;
+            line-height: 1.6;
+            text-align: center;
+        }
+
         .game-list-container {
             border: 3px dashed #000;
             border-radius: 6px;
             overflow: hidden;
+            /* 调整为自适应高度，移除最小高度限制 */
+            height: auto;
+            width: 100%;
         }
 
         .list-header {
@@ -131,7 +151,8 @@
 
         .footer-text {
             text-align: center;
-            margin: 40px 0 20px;
+            /* 大幅减少上边距，让文字上移 */
+            margin: 30px 0 10px;
             font-size: 28px;
             font-weight: bold;
             color: #000;
@@ -142,6 +163,8 @@
             font-size: 16px;
             color: #000;
             line-height: 1.6;
+            /* 减少上边距，同步上移 */
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -154,13 +177,18 @@
             <h1 class="header-title">黑 娃 游 戏 站</h1>
         </div>
 
+        <!-- 新增网站介绍区域（利于SEO收录） -->
+        <div class="site-intro">
+            黑娃游戏站，专门提供任何稀缺的游戏资源，让大家方便下载。还能通过联系作者说明需要的文件，作者会挨个认真收看每一条评论并尽力去弄到！希望得到大家的支持，谢谢！
+        </div>
+
         <!-- 游戏列表区域 -->
         <div class="game-list-container">
             <div class="list-header">
                 <h2>游戏列表</h2>
             </div>
 
-            <!-- 游戏条目 -->
+            <!-- 游戏条目1 -->
             <div class="game-item">
                 <div class="game-info">
                     <!-- 游戏图标：游戏图标1.PNG -->
@@ -180,6 +208,27 @@
                     本地下载
                 </button>
             </div>
+
+            <!-- 新增游戏条目2：PC迷你世界0.44.2版本 -->
+            <div class="game-item">
+                <div class="game-info">
+                    <!-- 游戏图标：游戏图标2.PNG（请替换为实际图标路径） -->
+                    <img src="游戏图标2.PNG" class="game-icon-img" alt="迷你世界图标">
+                    
+                    <div class="game-text">
+                        <h3>2. 【PC】迷你世界0.44.2版本</h3>
+                        <div class="game-details">
+                            大小：440M &nbsp;&nbsp;【沙盒创造】【休闲益智】
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 已更新为指定的迷你世界下载链接 -->
+                <button class="download-btn" onclick="window.location.href='https://1859015095.share.123865.com/123pan/Gl4cvd-dhKdH?pwd=1257#'">
+                    <span class="download-icon">↓</span>
+                    本地下载
+                </button>
+            </div>
         </div>
 
         <!-- 底部文字 -->
@@ -192,6 +241,7 @@
             <p>联系方式：</p>
             <p>QQ号：3868093996；</p>
             <p>快手号：heiwa126126.</p>
+            <p>[若有新的想法和建议，请联系作者，作者25小时在线！]</p>
         </div>
     </div>
 </body>
