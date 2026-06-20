@@ -2,17 +2,20 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <!-- 添加移动端强制电脑端视图的meta标签 -->
+    <!-- 视口设置：固定宽度适配、禁止缩放，保证移动端电脑端视图一致 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <!-- 修改标题为指定内容 -->
+    <!-- 网站标题：包含关键词利于SEO -->
     <title>《黑娃游戏站》-专属更新稀缺的游戏资源！</title>
+    <!-- 微软验证码 -->
     <meta name="msvalidate.01" content="5B23699F03AA1F311190C1AD97346912" />
-    <!-- 补充元描述，内容与网站介绍区域一致 -->
+    <!-- 元描述：包含核心关键词，提升SEO收录效果 -->
     <meta name="description" content="黑娃游戏站，专门提供任何稀缺的游戏资源，让大家方便下载。还能通过联系作者说明需要的文件，作者会挨个认真收看每一条评论并尽力去弄到！希望得到大家的支持，谢谢！">
+    <!-- 网站图标 -->
     <link rel="icon" href="网站LOGO.png" type="image/png">
     <style>
+        /* 全局样式重置：统一盒模型、清除默认边距、设置字体 */
         * {
             margin: 0;
             padding: 0;
@@ -20,17 +23,20 @@
             font-family: "Microsoft YaHei", sans-serif;
         }
 
+        /* 页面主体样式：渐变背景、最小高度铺满屏幕、内边距适配 */
         body {
             background: linear-gradient(180deg, #7b2cb3 0%, #ffc832 100%);
             min-height: 100vh;
             padding: 30px 20px;
         }
 
+        /* 容器样式：限制最大宽度、居中显示 */
         .container {
             max-width: 1100px;
             margin: 0 auto;
         }
 
+        /* 头部区域样式：弹性布局、垂直居中、元素间距、底部外边距 */
         .header {
             display: flex;
             align-items: center;
@@ -39,7 +45,7 @@
             margin-bottom: 20px;
         }
 
-        /* 顶部左边 LOGO 图标 */
+        /* LOGO图标样式：固定尺寸、内容适配、边框样式、阴影效果、背景色 */
         .logo-img {
             width: 120px;
             height: 120px;
@@ -50,6 +56,7 @@
             background: #1a73e8;
         }
 
+        /* 头部标题样式：字体大小、加粗、颜色、字符间距 */
         .header-title {
             font-size: 80px;
             font-weight: 900;
@@ -57,7 +64,7 @@
             letter-spacing: 10px;
         }
 
-        /* 新增网站介绍样式（保持视觉协调） */
+        /* 网站介绍区域样式：半透明背景、内边距、圆角、外边距、字体、行高、居中对齐 */
         .site-intro {
             background-color: rgba(255, 255, 255, 0.8);
             padding: 20px;
@@ -69,27 +76,30 @@
             text-align: center;
         }
 
+        /* 游戏列表容器样式：虚线边框、圆角、溢出隐藏、宽度100%、自适应高度 */
         .game-list-container {
             border: 3px dashed #000;
             border-radius: 6px;
             overflow: hidden;
-            /* 调整为自适应高度，移除最小高度限制 */
             height: auto;
             width: 100%;
         }
 
+        /* 列表头部样式：渐变背景、文字居中、内边距 */
         .list-header {
             background: linear-gradient(90deg, #c7ffd8 0%, #a0c8ff 100%);
             text-align: center;
             padding: 15px;
         }
 
+        /* 列表头部标题样式：字体大小、加粗、颜色 */
         .list-header h2 {
             font-size: 36px;
             font-weight: bold;
             color: #000;
         }
 
+        /* 游戏条目样式：背景色、弹性布局、垂直居中、两端对齐、内边距、外边距、圆角 */
         .game-item {
             background-color: #d3c7cb;
             display: flex;
@@ -100,13 +110,14 @@
             border-radius: 4px;
         }
 
+        /* 游戏信息区域样式：弹性布局、垂直居中、元素间距 */
         .game-info {
             display: flex;
             align-items: center;
             gap: 20px;
         }
 
-        /* 游戏图标 */
+        /* 游戏图标样式：固定尺寸、内容适配、背景色、内边距 */
         .game-icon-img {
             width: 80px;
             height: 80px;
@@ -115,16 +126,19 @@
             padding: 5px;
         }
 
+        /* 游戏文字标题样式：字体大小、底部外边距 */
         .game-text h3 {
             font-size: 28px;
             margin-bottom: 8px;
         }
 
+        /* 游戏详情样式：字体大小、颜色 */
         .game-details {
             font-size: 24px;
             color: #000;
         }
 
+        /* 下载按钮样式：背景色、文字颜色、无边框、圆角、内边距、字体大小、加粗、弹性布局、垂直居中、元素间距、鼠标指针 */
         .download-btn {
             background-color: #28a745;
             color: white;
@@ -137,8 +151,16 @@
             align-items: center;
             gap: 10px;
             cursor: pointer;
+            /* 新增：按钮hover效果 */
+            transition: background-color 0.3s ease;
         }
 
+        /* 下载按钮hover效果 */
+        .download-btn:hover {
+            background-color: #218838;
+        }
+
+        /* 下载图标样式：固定尺寸、白色边框、圆形、弹性布局、居中对齐、字体大小 */
         .download-icon {
             width: 35px;
             height: 35px;
@@ -150,22 +172,148 @@
             font-size: 22px;
         }
 
+        /* 底部文字样式：居中对齐、外边距、字体大小、加粗、颜色 */
         .footer-text {
             text-align: center;
-            /* 大幅减少上边距，让文字上移 */
             margin: 30px 0 10px;
             font-size: 28px;
             font-weight: bold;
             color: #000;
         }
 
+        /* 联系方式样式：居中对齐、字体大小、颜色、行高、顶部外边距 */
         .contact-info {
             text-align: center;
             font-size: 16px;
             color: #000;
             line-height: 1.6;
-            /* 减少上边距，同步上移 */
             margin-top: 10px;
+        }
+
+        /* 下载弹窗样式：固定定位、铺满屏幕、半透明背景、弹性布局、居中对齐、最高层级 */
+        .download-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        /* 弹窗内容样式：白色背景、内边距、圆角、居中对齐、最小宽度 */
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            text-align: center;
+            min-width: 500px;
+            /* 新增：弹窗阴影 */
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        /* 弹窗标题样式：字体大小、加粗、底部外边距、颜色 */
+        .modal-title {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            color: #000;
+        }
+
+        /* 弹窗按钮通用样式：内边距、字体大小、无边框、圆角、文字颜色、鼠标指针、水平外边距、过渡效果 */
+        .modal-btn {
+            padding: 15px 40px;
+            font-size: 24px;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            margin: 0 15px;
+            transition: background-color 0.3s ease;
+        }
+
+        /* 云盘按钮样式：背景色 */
+        .yunpan-btn {
+            background-color: #1a73e8;
+        }
+
+        /* 云盘按钮hover效果 */
+        .yunpan-btn:hover {
+            background-color: #1557b0;
+        }
+
+        /* 直链按钮样式：背景色 */
+        .direct-btn {
+            background-color: #ff6b00;
+        }
+
+        /* 直链按钮hover效果 */
+        .direct-btn:hover {
+            background-color: #e05a00;
+        }
+
+        /* 响应式适配：屏幕宽度小于768px时的样式调整 */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 20px;
+            }
+            .header-title {
+                font-size: 40px;
+                letter-spacing: 5px;
+            }
+            .logo-img {
+                width: 80px;
+                height: 80px;
+            }
+            .site-intro {
+                font-size: 18px;
+                padding: 15px;
+            }
+            .game-item {
+                flex-direction: column;
+                gap: 20px;
+                padding: 15px;
+            }
+            .game-info {
+                flex-direction: column;
+                text-align: center;
+            }
+            .game-text h3 {
+                font-size: 22px;
+            }
+            .game-details {
+                font-size: 18px;
+            }
+            .download-btn {
+                width: 100%;
+                justify-content: center;
+                padding: 15px;
+                font-size: 22px;
+            }
+            .modal-content {
+                min-width: 90%;
+                padding: 20px;
+            }
+            .modal-title {
+                font-size: 24px;
+            }
+            .modal-btn {
+                display: block;
+                width: 100%;
+                margin: 10px 0;
+                padding: 12px;
+                font-size: 20px;
+            }
+            .footer-text {
+                font-size: 20px;
+            }
+            .contact-info {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
@@ -173,12 +321,12 @@
     <div class="container">
         <!-- 顶部标题区域 -->
         <div class="header">
-            <!-- 左边 LOGO：黑娃游戏.png -->
-            <img src="网站LOGO.png" class="logo-img" alt="网站LOGO">
+            <!-- 网站LOGO -->
+            <img src="网站LOGO.png" class="logo-img" alt="黑娃游戏站LOGO">
             <h1 class="header-title">黑 娃 游 戏 站</h1>
         </div>
 
-        <!-- 新增网站介绍区域（利于SEO收录） -->
+        <!-- 网站介绍区域（SEO优化） -->
         <div class="site-intro">
             黑娃游戏站，专门提供任何稀缺的游戏资源，让大家方便下载。还能通过联系作者说明需要的文件，作者会挨个认真收看每一条评论并尽力去弄到！希望得到大家的支持，谢谢！
         </div>
@@ -189,11 +337,11 @@
                 <h2>游戏列表</h2>
             </div>
 
-            <!-- 游戏条目1 -->
+            <!-- 游戏条目1：小小梦魇2 -->
             <div class="game-item">
                 <div class="game-info">
-                    <!-- 游戏图标：游戏图标1.PNG -->
-                    <img src="游戏图标1.PNG" class="game-icon-img" alt="游戏图标">
+                    <!-- 游戏图标 -->
+                    <img src="游戏图标1.PNG" class="game-icon-img" alt="小小梦魇2图标">
                     
                     <div class="game-text">
                         <h3>1. 小小梦魇2 · 原版资源下载</h3>
@@ -203,17 +351,15 @@
                     </div>
                 </div>
                 
-                <!-- 核心修改：添加onclick事件实现跳转 -->
-                <button class="download-btn" onclick="window.location.href='https://1859015095.share.123865.com/123pan/Gl4cvd-gradH?pwd=1256#'">
+                <button class="download-btn" onclick="showDownloadModal('game1')">
                     <span class="download-icon">↓</span>
                     本地下载
                 </button>
             </div>
 
-            <!-- 新增游戏条目2：PC迷你世界0.44.2版本 -->
+            <!-- 游戏条目2：PC迷你世界0.44.2版本 -->
             <div class="game-item">
                 <div class="game-info">
-                    <!-- 游戏图标：游戏图标2.PNG（请替换为实际图标路径） -->
                     <img src="游戏图标2.PNG" class="game-icon-img" alt="迷你世界图标">
                     
                     <div class="game-text">
@@ -224,26 +370,112 @@
                     </div>
                 </div>
                 
-                <!-- 已更新为指定的迷你世界下载链接 -->
-                <button class="download-btn" onclick="window.location.href='https://1859015095.share.123865.com/123pan/Gl4cvd-dhKdH?pwd=1257#'">
+                <button class="download-btn" onclick="showDownloadModal('game2')">
                     <span class="download-icon">↓</span>
                     本地下载
                 </button>
             </div>
         </div>
 
-        <!-- 底部文字 -->
+        <!-- 底部提示文字 -->
         <div class="footer-text">
             ————————更多游戏待更新，敬请期待！————————
         </div>
 
-        <!-- 联系方式 -->
+        <!-- 联系方式区域 -->
         <div class="contact-info">
             <p>联系方式：</p>
             <p>QQ号：3868093996；</p>
             <p>快手号：heiwa126126.</p>
-            <p>[若有新的想法和建议，请联系作者，作者25小时在线！]</p>
+            <p>[如果你是手机版访问的该网页，页面布局可能有些乱，建议您通过浏览器设置访问电脑版的网页。若有新的想法和建议，欢迎联系作者，作者25小时在线！]</p>
         </div>
     </div>
+
+    <!-- 下载方式弹窗（默认隐藏） -->
+    <div id="downloadModal" class="download-modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-title" id="modalTitle">选择下载的方式</div>
+            <button class="modal-btn yunpan-btn" id="gameYunpanBtn">123云盘下载</button>
+            <button class="modal-btn direct-btn" id="gameDirectBtn">直链下载</button>
+        </div>
+    </div>
+
+    <script>
+        // 游戏下载链接配置对象：统一管理所有游戏的下载链接和名称
+        const gameDownloadLinks = {
+            game1: {
+                name: '小小梦魇2 · 原版资源',
+                yunpan: 'https://1859015095.share.123865.com/123pan/Gl4cvd-gradH?pwd=1256#',
+                direct: 'https://123-184-152-201-v2.pd1.cjjd19.com/user-share-pay-download-cdn.123295.com/123-927/3d2fbe18/1859015095-0/3d2fbe180bd2a7c02e9fe547f3f5cb9f/c-m9009?v=5&t=1782563078&r=8FSUTH&bzc=2&bzs=313835393031353039353a37343432393937303a333930383633343833353a313835393031353039353a32&ur=lmgumgvnigui&urn=0&s=17825630788ffe4205a370c1f32c6c27a00a88c684&bzp=0&bi=3847191329&filename=Little+Nightmares+II.zip&x-mf-biz-cid=cb074c66-0e74-4709-a0e1-4429ae3790fc-5baabb&auto_redirect=0&ndcp=1&cache_type=1'
+            },
+            game2: {
+                name: '【PC】迷你世界0.44.2版本',
+                yunpan: 'https://1859015095.share.123865.com/123pan/Gl4cvd-dhKdH?pwd=1257#',
+                direct: 'https://123-184-221-231-v2.pd1.cjjd19.com/user-share-free-download-cdn.123295.com/123-78/06470aef/1859015095-0/06470aef1ca3e105d4c26c589906484e/c-m9009?v=5&t=1782465069&r=5HTCSW&bzc=2&bzs=313835393031353039353a37343532303033343a3435363631323037383a313835393031353039353a32&ur=lmgumgvnegui&urn=0&s=17824650692050d4af1711b02c0dfb1ce581b84c31&bzp=0&bi=4285766575&filename=%E3%80%90PC%E3%80%91%E8%BF%B7%E4%BD%A0%E4%B8%96%E7%95%8C0.44.2%E7%89%88%E6%9C%AC%E5%AE%89%E8%A3%85%E5%8C%85.exe&x-mf-biz-cid=679515a8-5bc8-4ff2-93b0-5cda84344ade-584000&auto_redirect=0&ndcp=1&cache_type=1'
+            }
+        };
+
+        /**
+         * 显示下载弹窗并绑定对应游戏的下载链接
+         * @param {string} gameType - 游戏类型标识（game1/game2）
+         */
+        function showDownloadModal(gameType) {
+            // 获取DOM元素
+            const modal = document.getElementById('downloadModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const yunpanBtn = document.getElementById('gameYunpanBtn');
+            const directBtn = document.getElementById('gameDirectBtn');
+            
+            // 验证游戏类型是否存在
+            if (!gameDownloadLinks[gameType]) {
+                alert('该游戏下载链接不存在！');
+                return;
+            }
+            
+            // 动态设置弹窗标题
+            modalTitle.textContent = `选择“${gameDownloadLinks[gameType].name}”的下载方式`;
+            
+            // 绑定云盘下载链接
+            yunpanBtn.onclick = () => {
+                // 打开新窗口下载，避免跳离当前页面
+                window.open(gameDownloadLinks[gameType].yunpan, '_blank');
+            };
+            
+            // 绑定直链下载链接
+            directBtn.onclick = () => {
+                window.open(gameDownloadLinks[gameType].direct, '_blank');
+            };
+            
+            // 显示弹窗
+            modal.style.display = 'flex';
+        }
+
+        /**
+         * 关闭弹窗函数
+         */
+        function closeModal() {
+            const modal = document.getElementById('downloadModal');
+            modal.style.display = 'none';
+        }
+
+        // 点击弹窗空白处关闭弹窗
+        document.getElementById('downloadModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // 新增：ESC键关闭弹窗
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // 新增：页面加载完成后的初始化提示
+        window.addEventListener('DOMContentLoaded', function() {
+            console.log('黑娃游戏站页面加载完成！');
+        });
+    </script>
 </body>
 </html>
