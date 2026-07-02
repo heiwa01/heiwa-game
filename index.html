@@ -22,7 +22,6 @@
             box-sizing: border-box;
             font-family: "Microsoft YaHei", sans-serif;
         }
-
         /* ========== 基础布局样式 ========== */
         body {
             background: linear-gradient(180deg, #7b2cb3 0%, #ffc832 100%);
@@ -31,14 +30,12 @@
             /* 优化：防止内容溢出时出现横向滚动 */
             overflow-x: hidden;
         }
-
         .container {
             max-width: 1100px;
             margin: 0 auto;
             /* 优化：增加最大宽度下的内边距，避免边缘紧贴 */
             padding: 0 10px;
         }
-
         /* ========== 头部区域样式 ========== */
         .header {
             display: flex;
@@ -49,7 +46,6 @@
             /* 优化：适配小屏幕时的过渡效果 */
             transition: all 0.3s ease;
         }
-
         .logo-img {
             width: 120px;
             height: 120px;
@@ -61,12 +57,10 @@
             /* 优化：增加图片加载过渡 */
             transition: transform 0.3s ease;
         }
-
         /* 优化：LOGO hover效果 */
         .logo-img:hover {
             transform: scale(1.05);
         }
-
         .header-title {
             font-size: 80px;
             font-weight: 900;
@@ -76,21 +70,59 @@
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
-
-        /* ========== 网站介绍区域 ========== */
-        .site-intro {
-            background-color: rgba(255, 255, 255, 0.8);
-            padding: 20px;
-            border-radius: 8px;
+        /* ========== 新增：网站介绍下拉折叠模块 ========== */
+        .intro-collapse-wrap {
             margin: 0 0 20px 0;
+        }
+        /* 下拉标题按钮 */
+        .intro-toggle-btn {
+            width: 100%;
+            padding: 14px 20px;
+            background-color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 26px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .intro-toggle-btn:hover {
+            background-color: #f0f0f0;
+        }
+        /* 下拉箭头符号 */
+        .arrow-icon {
+            transition: transform 0.3s ease;
+        }
+        /* 展开时箭头旋转 */
+        .intro-collapse-wrap.active .arrow-icon {
+            transform: rotate(180deg);
+        }
+        /* 折叠内容容器 */
+        .site-intro-box {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+            background-color: rgba(255, 255, 0.8);
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        /* 展开后最大高度 */
+        .intro-collapse-wrap.active .site-intro-box {
+            max-height: 300px;
+        }
+        /* 介绍文本内容 */
+        .site-intro-text {
+            padding: 20px;
             font-size: 24px;
             color: #000;
             line-height: 1.6;
             text-align: center;
-            /* 优化：增加轻微阴影提升层次感 */
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
-
         /* ========== 游戏列表区域 ========== */
         .game-list-container {
             border: 3px dashed #000;
@@ -101,13 +133,11 @@
             /* 优化：增加内边距，避免内容紧贴边框 */
             padding: 5px;
         }
-
         .list-header {
             background: linear-gradient(90deg, #c7ffd8 0%, #a0c8ff 100%);
             text-align: center;
             padding: 15px;
         }
-
         .list-header h2 {
             font-size: 36px;
             font-weight: bold;
@@ -116,7 +146,6 @@
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
-
         /* 游戏条目样式 */
         .game-item {
             background-color: #d3c7cb;
@@ -130,18 +159,15 @@
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
             transition: background-color 0.3s ease;
         }
-
         /* 优化：游戏条目hover效果 */
         .game-item:hover {
             background-color: #c8b9be;
         }
-
         .game-info {
             display: flex;
             align-items: center;
             gap: 20px;
         }
-
         .game-icon-img {
             width: 80px;
             height: 80px;
@@ -152,12 +178,10 @@
             /* 优化：增加图片加载过渡 */
             transition: transform 0.3s ease;
         }
-
         /* 优化：游戏图标hover效果 */
         .game-icon-img:hover {
             transform: scale(1.1);
         }
-
         .game-text h3 {
             font-size: 28px;
             margin-bottom: 8px;
@@ -165,14 +189,12 @@
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
-
         .game-details {
             font-size: 24px;
             color: #000;
             /* 优化：次要文字降低对比度 */
             color: #333;
         }
-
         /* ========== 按钮样式 ========== */
         .download-btn {
             background-color: #28a745;
@@ -188,22 +210,19 @@
             cursor: pointer;
             transition: all 0.3s ease;
             /* 优化：增加按钮阴影 */
-            box-shadow: 0 4px 6px rgba(40, 167, 69, 0.2);
+            box-shadow: 0 4px 6 rgba(40, 167, 69, 0.2);
         }
-
         .download-btn:hover {
             background-color: #218838;
             /* 优化：hover时轻微上浮 */
             transform: translateY(-2px);
             box-shadow: 0 6px 8px rgba(40, 167, 69, 0.3);
         }
-
         /* 优化：按钮点击反馈 */
         .download-btn:active {
             transform: translateY(0);
             box-shadow: 0 2px 4px rgba(40, 167, 69, 0.2);
         }
-
         .download-icon {
             width: 35px;
             height: 35px;
@@ -214,7 +233,6 @@
             justify-content: center;
             font-size: 22px;
         }
-
         /* ========== 底部区域样式 ========== */
         .footer-text {
             text-align: center;
@@ -226,7 +244,6 @@
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
-
         /* 新增：制作详情信息按钮样式 */
         .detail-info-btn {
             display: block;
@@ -242,18 +259,15 @@
             transition: all 0.3s ease;
             box-shadow: 0 4px 6px rgba(26, 115, 232, 0.2);
         }
-
         .detail-info-btn:hover {
             background-color: #1557b0;
             transform: translateY(-2px);
             box-shadow: 0 6px 8px rgba(26, 115, 232, 0.3);
         }
-
         .detail-info-btn:active {
             transform: translateY(0);
             box-shadow: 0 2px 4px rgba(26, 115, 232, 0.2);
         }
-
         /* ========== 弹窗样式 ========== */
         .download-modal {
             position: fixed;
@@ -272,7 +286,6 @@
             /* 优化：防止弹窗内内容溢出 */
             overflow-y: auto;
         }
-
         .modal-content {
             background: white;
             padding: 40px;
@@ -284,17 +297,15 @@
             transition: transform 0.2s ease;
             /* 优化：增加内边距适配 */
             box-sizing: border-box;
+            position: relative;
         }
-
         .download-modal.active {
             opacity: 1;
             visibility: visible;
         }
-
         .download-modal.active .modal-content {
             transform: scale(1);
         }
-
         .modal-title {
             font-size: 32px;
             font-weight: bold;
@@ -304,7 +315,6 @@
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
-
         .modal-btn {
             padding: 15px 40px;
             font-size: 24px;
@@ -312,40 +322,54 @@
             border-radius: 6px;
             color: white;
             cursor: pointer;
-            margin: 0 15px;
             transition: all 0.3s ease;
             /* 优化：按钮阴影 */
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-
         /* 优化：按钮hover上浮效果 */
         .modal-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
         }
-
         /* 优化：按钮点击反馈 */
         .modal-btn:active {
             transform: translateY(0);
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-
         .yunpan-btn {
             background-color: #1a73e8;
         }
-
         .yunpan-btn:hover {
             background-color: #1557b0;
         }
-
         .direct-btn {
             background-color: #ff6b00;
         }
-
         .direct-btn:hover {
             background-color: #e05a00;
         }
-
+        /* 详情弹窗关闭按钮样式 */
+        .close-detail-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: #e74c3c;
+            color: #fff;
+            font-size: 22px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        .close-detail-btn:hover {
+            background: #c0392c;
+            transform: scale(1.08);
+        }
         /* 新增：漂浮提示文字样式 */
         .float-tip {
             position: fixed;
@@ -362,7 +386,6 @@
             animation: floatTipAnimation 2s ease-in-out;
             pointer-events: none;
         }
-
         /* 新增：漂浮提示动画 */
         @keyframes floatTipAnimation {
             0% { opacity: 0; transform: translate(-50%, -60%); }
@@ -370,7 +393,6 @@
             80% { opacity: 1; transform: translate(-50%, -50%); }
             100% { opacity: 0; transform: translate(-50%, -40%); }
         }
-
         /* 新增：详情信息弹窗样式（复用下载弹窗基础样式） */
         .detail-modal {
             position: fixed;
@@ -388,23 +410,19 @@
             transition: opacity 0.2s ease;
             overflow-y: auto;
         }
-
         .detail-modal.active {
             opacity: 1;
             visibility: visible;
         }
-
         .detail-modal.active .modal-content {
             transform: scale(1);
         }
-
         .detail-content {
             font-size: 20px;
             line-height: 1.8;
             text-align: left;
             color: #333;
         }
-
         /* ========== 响应式适配（移动端） ========== */
         @media (max-width: 768px) {
             .header {
@@ -419,7 +437,12 @@
                 width: 80px;
                 height: 80px;
             }
-            .site-intro {
+            /* 下拉模块移动端适配 */
+            .intro-toggle-btn {
+                font-size: 20px;
+                padding: 12px;
+            }
+            .site-intro-text {
                 font-size: 18px;
                 padding: 15px;
             }
@@ -473,8 +496,12 @@
             .detail-content {
                 font-size: 18px;
             }
+            .close-detail-btn {
+                width: 34px;
+                height: 34px;
+                font-size: 18px;
+            }
         }
-
         /* ========== 辅助样式 ========== */
         /* 优化：图片加载失败时的占位样式 */
         img[alt]::after {
@@ -484,7 +511,7 @@
             justify-content: center;
             width: 100%;
             height: 100%;
-            background: #f5f5f5;
+            background: #f5f5;
             color: #666;
             border: 1px dashed #ccc;
         }
@@ -498,18 +525,23 @@
             <img src="网站LOGO.png" class="logo-img" alt="黑娃游戏站LOGO" loading="lazy">
             <h1 class="header-title">黑 娃 游 戏 站</h1>
         </div>
-
-        <!-- 网站介绍区域（SEO优化） -->
-        <div class="site-intro">
-            黑娃游戏站，专门提供任何稀缺的游戏资源，让大家方便下载。还能通过联系作者说明需要的文件，作者会挨个认真收看每一条评论并尽力去弄到！希望得到大家的支持，谢谢！
+        <!-- 【默认添加active实现页面加载自动展开】 -->
+        <div class="intro-collapse-wrap active" id="introWrap">
+            <button class="intro-toggle-btn" id="introBtn">
+                网站介绍
+                <span class="arrow-icon">▼</span>
+            </button>
+            <div class="site-intro-box">
+                <div class="site-intro-text">
+                    黑娃游戏站，专门提供任何稀缺的游戏资源，让大家方便下载。还能通过联系作者说明需要的文件，作者会挨个认真收看每一条评论并尽力去弄到！希望得到大家的支持，谢谢！
+                </div>
+            </div>
         </div>
-
         <!-- 游戏列表区域 -->
         <div class="game-list-container">
             <div class="list-header">
                 <h2>游戏列表</h2>
             </div>
-
             <!-- 游戏条目1：小小梦魇2 -->
             <div class="game-item">
                 <div class="game-info">
@@ -527,7 +559,6 @@
                     本地下载
                 </button>
             </div>
-
             <!-- 游戏条目2：PC迷你世界0.44.2版本 -->
             <div class="game-item">
                 <div class="game-info">
@@ -544,7 +575,6 @@
                     本地下载
                 </button>
             </div>
-
             <!-- 游戏条目3：PC迷你世界0.52.1版本 -->
             <div class="game-item">
                 <div class="game-info">
@@ -561,17 +591,46 @@
                     本地下载
                 </button>
             </div>
+            <!-- 新增游戏条目4：【安卓】迷你世界0.44.2版本 -->
+            <div class="game-item">
+                <div class="game-info">
+                    <img src="游戏图标2.PNG" class="game-icon-img" alt="迷你世界安卓0.44.2图标" loading="lazy">
+                    <div class="game-text">
+                        <h3>4. 【安卓】迷你世界0.44.2版本</h3>
+                        <div class="game-details">
+                            大小：290M &nbsp;&nbsp;【沙盒创造】【休闲益智】
+                        </div>
+                    </div>
+                </div>
+                <button class="download-btn" data-game="game4">
+                    <span class="download-icon">↓</span>
+                    本地下载
+                </button>
+            </div>
+            <!-- 新增游戏条目5：【安卓】迷你世界0.52.1版本 -->
+            <div class="game-item">
+                <div class="game-info">
+                    <img src="游戏图标3.PNG" class="game-icon-img" alt="迷你世界安卓0.52.1图标" loading="lazy">
+                    <div class="game-text">
+                        <h3>5. 【安卓】迷你世界0.52.1版本</h3>
+                        <div class="game-details">
+                            大小：460M &nbsp;&nbsp;【休闲游戏】【沙盒游戏】
+                        </div>
+                    </div>
+                </div>
+                <button class="download-btn" data-game="game5">
+                    <span class="download-icon">↓</span>
+                    本地下载
+                </button>
+            </div>
         </div>
-
         <!-- 底部提示文字 -->
         <div class="footer-text">
             ————————更多游戏待更新，敬请期待！————————
         </div>
-
         <!-- 替换原有联系方式为详情信息按钮 -->
         <button class="detail-info-btn" id="detailInfoBtn">制作详情信息</button>
     </div>
-
     <!-- 下载方式弹窗（默认隐藏） -->
     <div id="downloadModal" class="download-modal">
         <div class="modal-content">
@@ -580,17 +639,17 @@
             <button class="modal-btn direct-btn" id="gameDirectBtn">直链下载</button>
         </div>
     </div>
-
-    <!-- 新增：详情信息弹窗（默认隐藏） -->
+    <!-- 新增：详情信息弹窗（添加右上角关闭按钮） -->
     <div id="detailModal" class="detail-modal">
         <div class="modal-content">
+            <button class="close-detail-btn" onclick="closeDetailModal()">×</button>
             <div class="modal-title">《黑娃游戏站》制作详情信息</div>
             <div class="detail-content">
-                <p>-目前网站版本：1.4</p>
-                <p>-网站发布日期：2026.5.9</p>
-                <p>-网站更新日期：2026.6.28</p>
-                <p>-本次更新内容：全面优化网页的UI界面，添加了多元素的动画效果，让用户更有体验效果！新增游戏条目：【PC】迷你世界0.52.1版本。</p>
-                <p>-作者网名：黑娃！</p>
+                <p>-目前网站版本：1.5；</p>
+                <p>-网站发布日期：2026.5.8；</p>
+                <p>-网站更新日期：2026.7.2；</p>
+                <p>-本次更新内容：全面优化网页的UI界面，添加了多元素的动画效果，网站介绍可以隐藏等功能，确保网页整体更简洁，增加用户体验！新增【安卓】迷你世界0.44.2、【安卓】迷你世界0.52.1版本；</p>
+                <p>-作者网名：黑娃！；</p>
                 <p>-联系方式：</p>
                 <p>-QQ号：3868093996；</p>
                 <p>-快手号：heiwa126126.</p>
@@ -598,7 +657,6 @@
             </div>
         </div>
     </div>
-
     <script>
         // ========== 全局配置 ==========
         // 游戏下载链接配置：统一管理所有游戏的下载链接和名称
@@ -617,9 +675,20 @@
                 name: '【PC】迷你世界0.52.1版本',
                 yunpan: 'https://1859015095.share.123865.com/123pan/Gl4cvd-WEB3H?pwd=1258#',
                 direct: 'https://files.zohopublic.com.cn/public/workdrive-public/download/27xz8c876e825ada84b029929f0ba757a83e1?x-cli-msg=%7B%22linkId%22%3A%221Mwbf7o2hqV-3a4av%22%2C%22isFileOwner%22%3Afalse%2C%22version%22%3A%221.0%22%2C%22isWDSupport%22%3Afalse%7D'
+            },
+            // 新增安卓0.44.2配置
+            game4: {
+                name: '【安卓】迷你世界0.44.2版本',
+                yunpan: 'https://1859015095.share.123pan.cn/123pan/Gl4cvd-KC33H?pwd=1259#',
+                direct: 'https://files.zohopublic.com.cn/public/workdrive-public/download/27xz85a24f75ef19f43ff9152177ca34612fa?x-cli-msg=%7B%22linkId%22%3A%221Mwbf7o2kiw-3a4av%22%2C%22isFileOwner%22%3Afalse%2C%22version%22%3A%221.0%22%2C%22isWDSupport%22%3Afalse%7D'
+            },
+            // 新增安卓0.52.1配置
+            game5: {
+                name: '【安卓】迷你世界0.52.1版本',
+                yunpan: 'https://1859015095.share.123pan.cn/123pan/Gl4cvd-7QKdH?pwd=1260#',
+                direct: 'https://download.zoho.com.cn/v1/workdrive/download/27xz88914a6f5c4f24c46a1e818b45a81d5a1?x-cli-msg=%7B%22isFileOwner%22%3Atrue%2C%22version%22%3A%221.0%22%2C%22isWDSupport%22%3Afalse%7D'
             }
         };
-
         // ========== DOM元素缓存 ==========
         const DOM = {
             downloadModal: document.getElementById('downloadModal'),
@@ -629,13 +698,15 @@
             downloadBtns: document.querySelectorAll('.download-btn'),
             // 新增：详情信息弹窗相关元素
             detailModal: document.getElementById('detailModal'),
-            detailInfoBtn: document.getElementById('detailInfoBtn')
+            detailInfoBtn: document.getElementById('detailInfoBtn'),
+            // 新增：网站下拉介绍元素
+            introWrap: document.getElementById('introWrap'),
+            introBtn: document.getElementById('introBtn')
         };
-
         // ========== 工具函数 ==========
         /**
          * 显示下载弹窗并绑定对应游戏的下载链接
-         * @param {string} gameKey - 游戏标识（game1/game2/game3）
+         * @param {string} gameKey - 游戏标识（game1/game2/game3/game4/game5）
          */
         function showDownloadModal(gameKey) {
             // 验证游戏配置是否存在
@@ -643,7 +714,6 @@
                 alert('该游戏的下载链接暂未配置！');
                 return;
             }
-
             const gameConfig = GAME_DOWNLOAD_CONFIG[gameKey];
             
             // 动态更新弹窗标题
@@ -654,19 +724,18 @@
             
             // 判断是否为第一个游戏（game1）
             if (gameKey === 'game1') {
-                // 移除第一个游戏直链下载的原有事件，替换为漂浮提示
+                // 移除第一个游戏直链的原有事件，替换为漂浮提示
                 DOM.gameDirectBtn.onclick = function() {
                     showFloatTip('由于该资源过大，作者还在更新中，请使用123云盘下载');
                 };
             } else {
-                // 其他游戏绑定正常的直链下载事件
+                // 其余所有游戏（2/3/4/5）正常绑定直链下载
                 DOM.gameDirectBtn.onclick = () => openDownloadLink(gameConfig.direct);
             }
             
             // 显示弹窗
             DOM.downloadModal.classList.add('active');
         }
-
         /**
          * 关闭下载弹窗
          */
@@ -676,22 +745,21 @@
             DOM.gameYunpanBtn.onclick = null;
             DOM.gameDirectBtn.onclick = null;
         }
-
         /**
          * 打开下载链接（新窗口）
          * @param {string} url - 下载链接
          */
         function openDownloadLink(url) {
-            // 验证链接有效性
+            // 判断链接为空时提示未更新
             if (!url || !url.startsWith('http')) {
-                alert('下载链接无效，请联系管理员！');
+                showFloatTip('该版本资源暂未上传，敬请等待更新！');
                 return;
             }
             
             // 打开新窗口下载
             const newWindow = window.open(url, '_blank');
             
-            // 优化：处理弹窗被拦截的情况
+            // 优化：处理弹窗被浏览器拦截
             if (!newWindow) {
                 alert('下载窗口被浏览器拦截，请允许弹窗后重试！');
             }
@@ -699,106 +767,85 @@
             // 关闭弹窗
             closeDownloadModal();
         }
-
         /**
          * 新增：显示漂浮提示文字
          * @param {string} text - 提示文字内容
          */
         function showFloatTip(text) {
-            // 创建提示元素
+            // 创建提示DOM
             const tipElement = document.createElement('div');
             tipElement.className = 'float-tip';
             tipElement.textContent = text;
-            
-            // 添加到页面
             document.body.appendChild(tipElement);
-            
-            // 动画结束后移除元素
+            // 2秒后自动删除
             setTimeout(() => {
                 document.body.removeChild(tipElement);
             }, 2000);
         }
-
         /**
-         * 新增：显示详情信息弹窗
+         * 显示详情弹窗
          */
         function showDetailModal() {
             DOM.detailModal.classList.add('active');
         }
-
         /**
-         * 新增：关闭详情信息弹窗
+         * 关闭详情弹窗
          */
         function closeDetailModal() {
             DOM.detailModal.classList.remove('active');
         }
-
-        // ========== 事件绑定 ==========
         /**
-         * 初始化事件监听
+         * 新增：切换网站介绍展开/收起
          */
+        function toggleIntroBox() {
+            DOM.introWrap.classList.toggle('active');
+        }
+        // ========== 事件绑定 ==========
         function initEventListeners() {
-            // 绑定下载按钮点击事件
+            // 网站介绍下拉点击事件
+            DOM.introBtn.addEventListener('click', toggleIntroBox);
+            // 所有下载按钮统一绑定点击
             DOM.downloadBtns.forEach(btn => {
                 btn.addEventListener('click', function() {
                     const gameKey = this.dataset.game;
                     showDownloadModal(gameKey);
                 });
             });
-
-            // 点击下载弹窗空白处关闭弹窗
+            // 点击遮罩关闭下载弹窗
             DOM.downloadModal.addEventListener('click', function(e) {
-                if (e.target === this) {
-                    closeDownloadModal();
-                }
+                if (e.target === this) closeDownloadModal();
             });
-
-            // 新增：点击详情弹窗空白处关闭弹窗
+            // 点击遮罩关闭详情弹窗
             DOM.detailModal.addEventListener('click', function(e) {
-                if (e.target === this) {
-                    closeDetailModal();
-                }
+                if (e.target === this) closeDetailModal();
             });
-
-            // ESC键关闭所有弹窗
+            // ESC一键关闭所有弹窗
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape') {
                     closeDownloadModal();
                     closeDetailModal();
                 }
             });
-
-            // 新增：绑定详情信息按钮点击事件
+            // 详情按钮点击
             DOM.detailInfoBtn.addEventListener('click', showDetailModal);
         }
-
-        // ========== 初始化 ==========
-        /**
-         * 页面初始化函数
-         */
+        // ========== 页面初始化 ==========
         function init() {
-            // 初始化事件监听
             initEventListeners();
-            
-            // 控制台日志（调试用）
-            console.log('黑娃游戏站页面初始化完成！');
-            
-            // 优化：图片加载失败处理
+            console.log('黑娃游戏站页面加载完成！');
+            // 图片加载失败兜底
             document.querySelectorAll('img').forEach(img => {
                 img.addEventListener('error', function() {
-                    this.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iNDAiIGN5PSI0MCIgcj0iNDAiIGZpbGw9IiNGRkY5MDAiLz4KPHBhdGggZD0iTTQwIDI1QzMwLjc0NSAyNSAyMyAzMi43NDUgMjMgNDNDMjMgNTMuMjU1IDMwLjc0NSA2MSA0MCA2MUM0OS4yNTUgNjEgNTcgNTMuMjU1IDU3IDQzQzU3IDMyLjc0NSA0OS4yNTUgMjUgNDAgMjVaIiBmaWxsPSIjNzc3Ii8+CjxwYXRoIGQ9Ik00MCAzNUM0NC40MTggMzUgNDggMzguNTgyIDQ4IDQzQzQ4IDQ3LjQxOCA0NC40MTggNTEgNDAgNTEgMzUuNTgyIDUxIDMyIDQ3LjQxOCAzMiA0M0MzMiAzOC41ODIgMzUuNTgyIDM1IDQwIDM1WiIgZmlsbD0iIzUwNSIvPgo8L3N2Zz4=';
+                    this.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iNDAiIGN5PSI0MCIgcj0iNDAiIGZpbGw9IiNGRkY5MDAiLz4KPHBhdGggZD0iTTQwIDI1QzMwLjc0NSAyNSAyMyAzMi43NDUgMjMgNDNDMjMgNTMuMjU1IDMwLjc0NSA2MSA0MCA2MUM0OS4yNTUgNjEgNTcgNTMuMjU1IDU3IDQzQzU3IDMyLjc0NSA0OS4yNTUgMjUgNDAgMjVaIiBmaWxsPSIjNzc3Ii8+CjxwYXRoIGQ9Ik00MCAzNUM0NC40MTggMzUgNDggMzguNTgyIDQ4IDQzQzQ4IDQ3LjQxOCA0NC40MTggNTEgNDAgNTFDMzUuNTgyIDUxIDMyIDQ3LjQxOCAzMiA0M0MzMiAzOC41ODIgMzUuNTgyIDM1IDQwIDM1WiIgZmlsbD0iIzUwNSIvPgo8L3N2Zz4=';
                     this.alt = '图片加载失败';
                 });
             });
         }
-
-        // 页面加载完成后初始化
+        // DOM加载完成执行初始化
         window.addEventListener('DOMContentLoaded', init);
-
-        // ========== 错误处理 ==========
         // 全局错误捕获
         window.addEventListener('error', function(e) {
-            console.error('页面发生错误：', e.message, e.filename, e.lineno);
+            console.error('页面异常：', e.message, e.filename, e.lineno);
         });
     </script>
 </body>
