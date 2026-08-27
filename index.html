@@ -2,851 +2,799 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <!-- 视口设置：固定宽度适配、禁止缩放，保证移动端电脑端视图一致（保留原有缩放逻辑） -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    
+    <!-- ====== 视口与移动端适配 ====== -->
+    <!-- 允许缩放以配合 JS 等比缩放系统，同时保证初始渲染正确 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <!-- SEO优化：标题包含核心关键词 -->
-    <title>《黑娃游戏站》-专属更新稀缺的游戏资源！</title>
-    <!-- 微软站点验证 -->
-    <meta name="msvalidate.01" content="5B23699F03AA1F311190C1AD97346912" />
-    <!-- SEO优化：描述包含核心关键词，提升收录效果 -->
+    <meta name="theme-color" content="#7b2cb3">
+
+    <!-- ====== SEO 元信息 ====== -->
+    <title>《黑娃游戏站》- 专属更新稀缺的游戏资源！</title>
     <meta name="description" content="黑娃游戏站，专门提供任何稀缺的游戏资源，让大家方便下载。还能通过联系作者说明需要的文件，作者会挨个认真收看每一条评论并尽力去弄到！希望得到大家的支持，谢谢！">
-    <!-- 网站图标 -->
+    <meta name="msvalidate.01" content="5B23699F03AA1F311190C1AD97346912">
+
+    <!-- ====== 网站图标 ====== -->
     <link rel="icon" href="网站LOGO.png" type="image/png">
+
     <style>
-        /* ========== 全局样式重置 ========== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Microsoft YaHei", sans-serif;
+        /* ================================================================
+           一、Design Tokens（设计令牌）
+           将所有视觉常量集中管理，修改一处即可全局生效
+           ================================================================ */
+        :root {
+            /* 布局基准 */
+            --desktop-base-width: 1100;
+
+            /* 品牌色板 */
+            --color-primary:       #1a73e8;
+            --color-primary-hover: #1557b0;
+            --color-primary-light: rgba(26, 115, 232, 0.1);
+            --color-success:       #28a745;
+            --color-success-hover: #218838;
+            --color-success-light: rgba(40, 167, 69, 0.1);
+            --color-danger:        #e74c3c;
+            --color-warning:       #ff6b00;
+
+            /* 文字层级 */
+            --color-text:       #1a1a2e;
+            --color-text-sub:   #444;
+            --color-text-muted: #999;
+            --color-white:      #fff;
+
+            /* 玻璃拟态系统 */
+            --glass-bg:         rgba(255, 255, 255, 0.65);
+            --glass-bg-hover:   rgba(255, 255, 255, 0.92);
+            --glass-border:     rgba(255, 255, 255, 0.35);
+            --glass-blur:       blur(12px);
+
+            /* 阴影层级 */
+            --shadow-sm:        0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-md:        0 4px 12px rgba(0, 0, 0, 0.1);
+            --shadow-card-hover: 0 12px 32px rgba(123, 44, 179, 0.15);
+            --shadow-modal:     0 25px 60px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.15);
+
+            /* 圆角规范 */
+            --radius-sm: 6px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+
+            /* 动效时长 */
+            --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+            --transition-fast:   0.2s ease;
+            --transition-normal: 0.3s ease;
         }
-        /* ========== 基础布局样式 ========== */
+
+        /* ================================================================
+           二、全局重置与安全保护
+           ================================================================ */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            background: linear-gradient(180deg, #7b2cb3 0%, #ffc832 100%);
+            font-family: "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            background: linear-gradient(135deg, #7b2cb3 0%, #9b4dca 40%, #ffc832 100%);
+            background-attachment: fixed; /* 视差滚动背景 */
             min-height: 100vh;
             padding: 30px 20px;
-            /* 优化：防止内容溢出时出现横向滚动 */
             overflow-x: hidden;
+            transform-origin: top left;
+            
+            /* 🔒 全局禁止文字选择（详情弹窗内容区单独覆盖） */
+            -webkit-user-select: none;
+            user-select: none;
         }
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            /* 优化：增加最大宽度下的内边距，避免边缘紧贴 */
-            padding: 0 10px;
+
+        /* 🔒 禁止图片拖拽 */
+        img {
+            -webkit-user-drag: none;
+            user-drag: none;
+            pointer-events: none; /* 阻止原生拖拽事件 */
         }
-        /* ========== 头部区域样式 ========== */
+
+        /* 恢复交互元素的点击能力 */
+        .download-icon, .modal-icon, .arrow-icon svg, 
+        .logo-img, .game-icon-img { pointer-events: auto; }
+
+        /* ✅ 允许用户选中联系方式（QQ/快手号） */
+        .detail-content dd, .copyable {
+            -webkit-user-select: text !important;
+            user-select: text !important;
+            cursor: text;
+        }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 10px; }
+
+        /* ================================================================
+           三、入场动画系统
+           ================================================================ */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-entry { animation: fadeInUp 0.6s var(--ease-out) both; }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+
+        /* 光泽扫过动画 */
+        @keyframes shimmer { to { left: 150%; } }
+
+        /* LOGO 呼吸光晕 */
+        @keyframes logoBreath {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50%      { opacity: 0.8; transform: scale(1.08); }
+        }
+
+        /* ================================================================
+           四、头部区域
+           ================================================================ */
         .header {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 40px;
-            margin-bottom: 20px;
-            /* 优化：适配小屏幕时的过渡效果 */
-            transition: all 0.3s ease;
+            display: flex; align-items: center; justify-content: center;
+            gap: 40px; margin-bottom: 24px;
         }
+
+        .logo-wrapper { position: relative; flex-shrink: 0; }
+        
+        /* LOGO 呼吸光圈 */
+        .logo-wrapper::before {
+            content: ''; position: absolute; inset: -8px;
+            border-radius: var(--radius-md);
+            background: linear-gradient(135deg, #00d4ff, #7b2cb3);
+            opacity: 0.6; filter: blur(12px);
+            animation: logoBreath 3s ease-in-out infinite; z-index: 0;
+        }
+
         .logo-img {
-            width: 120px;
-            height: 120px;
-            object-fit: contain;
-            border: 3px solid #00d4ff;
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(0, 212, 255, 0.6);
-            background: #1a73e8;
-            /* 优化：增加图片加载过渡 */
-            transition: transform 0.3s ease;
+            width: 120px; height: 120px; object-fit: contain;
+            border: 3px solid rgba(255,255,255,0.6);
+            border-radius: var(--radius-md);
+            background: var(--color-primary);
+            position: relative; z-index: 1;
+            transition: transform var(--transition-normal); cursor: pointer;
         }
-        /* 优化：LOGO hover效果 */
-        .logo-img:hover {
-            transform: scale(1.05);
-        }
+        .logo-img:hover { transform: scale(1.08) rotate(-3deg); }
+
         .header-title {
-            font-size: 80px;
-            font-weight: 900;
-            color: #000;
-            letter-spacing: 10px;
-            /* 优化：文字抗锯齿 */
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+            font-size: 80px; font-weight: 900; letter-spacing: 10px; line-height: 1.2;
+            background: linear-gradient(180deg, #1a1a2e, #4a2c6e);
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+            text-shadow: 2px 2px 0 rgba(255,255,255,0.3), 0 4px 12px rgba(123,44,179,0.2);
         }
-        /* ========== 新增：网站介绍下拉折叠模块 ========== */
-        .intro-collapse-wrap {
-            margin: 0 0 20px 0;
-        }
-        /* 下拉标题按钮 */
+
+        /* ================================================================
+           五、折叠面板
+           ================================================================ */
+        .intro-collapse-wrap { margin-bottom: 24px; }
+
         .intro-toggle-btn {
-            width: 100%;
-            padding: 14px 20px;
-            background-color: #fff;
-            border: none;
-            border-radius: 8px;
-            font-size: 26px;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
+            width: 100%; padding: 16px 24px;
+            background: var(--glass-bg); backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border); border-radius: var(--radius-md);
+            font-size: 26px; font-weight: bold; color: var(--color-text);
+            cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 12px;
+            box-shadow: var(--shadow-sm); transition: all var(--transition-normal);
         }
-        .intro-toggle-btn:hover {
-            background-color: #f0f0f0;
-        }
-        /* 下拉箭头符号 */
-        .arrow-icon {
-            transition: transform 0.3s ease;
-        }
-        /* 展开时箭头旋转 */
-        .intro-collapse-wrap.active .arrow-icon {
-            transform: rotate(180deg);
-        }
-        /* 折叠内容容器 */
+        .intro-toggle-btn:hover { background: rgba(255,255,255,0.85); box-shadow: var(--shadow-md); }
+
+        .arrow-icon { display: inline-flex; transition: transform var(--transition-normal); }
+        .arrow-icon svg { width: 20px; height: 20px; fill: currentColor; }
+        .intro-collapse-wrap.active .arrow-icon { transform: rotate(180deg); }
+
         .site-intro-box {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease;
-            background-color: rgba(255, 255, 0.8);
-            border-radius: 0 0 8px 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            max-height: 0; overflow: hidden;
+            transition: max-height 0.4s var(--ease-out);
+            background: rgba(255,255,255,0.75); backdrop-filter: var(--glass-blur);
+            border-radius: 0 0 var(--radius-md) var(--radius-md);
         }
-        /* 展开后最大高度 */
-        .intro-collapse-wrap.active .site-intro-box {
-            max-height: 300px;
-        }
-        /* 介绍文本内容 */
+        .intro-collapse-wrap.active .site-intro-box { max-height: 300px; }
+
         .site-intro-text {
-            padding: 20px;
-            font-size: 24px;
-            color: #000;
-            line-height: 1.6;
-            text-align: center;
+            padding: 24px; font-size: 24px; color: var(--color-text);
+            line-height: 1.8; text-align: center;
+            opacity: 0; transform: translateY(-8px);
+            transition: opacity 0.3s ease 0.1s, transform 0.3s ease 0.1s;
         }
-        /* ========== 游戏列表区域 ========== */
+        .intro-collapse-wrap.active .site-intro-text { opacity: 1; transform: translateY(0); }
+
+        /* ================================================================
+           六、游戏列表
+           ================================================================ */
         .game-list-container {
-            border: 3px dashed #000;
-            border-radius: 6px;
-            overflow: hidden;
-            height: auto;
-            width: 100%;
-            /* 优化：增加内边距，避免内容紧贴边框 */
-            padding: 5px;
+            background: rgba(255,255,255,0.35); backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border); border-radius: var(--radius-lg);
+            padding: 8px; width: 100%;
         }
+
         .list-header {
-            background: linear-gradient(90deg, #c7ffd8 0%, #a0c8ff 100%);
-            text-align: center;
-            padding: 15px;
+            background: linear-gradient(90deg, #c7ffd8, #a0c8ff);
+            text-align: center; padding: 18px;
+            border-radius: var(--radius-md); margin-bottom: 4px;
         }
-        .list-header h2 {
-            font-size: 36px;
-            font-weight: bold;
-            color: #000;
-            /* 优化：文字抗锯齿 */
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-        /* 游戏条目样式 */
+        .list-header h2 { font-size: 36px; font-weight: bold; letter-spacing: 4px; }
+
         .game-item {
-            background-color: #d3c7cb;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 20px 30px;
-            margin: 10px 0;
-            border-radius: 4px;
-            /* 优化：增加阴影和过渡效果 */
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-            transition: background-color 0.3s ease;
+            background: var(--glass-bg);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 22px 30px; margin: 8px 0;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(255,255,255,0.4);
+            border-left: 4px solid var(--color-primary);
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-normal);
+            position: relative; overflow: hidden;
         }
-        /* 优化：游戏条目hover效果 */
+
+        /* 悬停态：上浮 + 阴影 + 变色 */
         .game-item:hover {
-            background-color: #c8b9be;
+            background: var(--glass-bg-hover);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-card-hover);
+            border-left-color: var(--color-success);
         }
-        .game-info {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-        .game-icon-img {
-            width: 80px;
-            height: 80px;
-            object-fit: contain;
-            background: #1a1a1a;
-            padding: 5px;
-            border-radius: 4px;
-            /* 优化：增加图片加载过渡 */
-            transition: transform 0.3s ease;
-        }
-        /* 优化：游戏图标hover效果 */
-        .game-icon-img:hover {
-            transform: scale(1.1);
-        }
-        .game-text h3 {
-            font-size: 28px;
-            margin-bottom: 8px;
-            /* 优化：文字抗锯齿 */
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-        .game-details {
-            font-size: 24px;
-            color: #000;
-            /* 优化：次要文字降低对比度 */
-            color: #333;
-        }
-        /* ========== 按钮样式 ========== */
-        .download-btn {
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            padding: 18px 35px;
-            font-size: 28px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            /* 优化：增加按钮阴影 */
-            box-shadow: 0 4px 6 rgba(40, 167, 69, 0.2);
-        }
-        .download-btn:hover {
-            background-color: #218838;
-            /* 优化：hover时轻微上浮 */
-            transform: translateY(-2px);
-            box-shadow: 0 6px 8px rgba(40, 167, 69, 0.3);
-        }
-        /* 优化：按钮点击反馈 */
-        .download-btn:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 4px rgba(40, 167, 69, 0.2);
-        }
-        .download-icon {
-            width: 35px;
-            height: 35px;
-            border: 3px solid white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-        }
-        /* ========== 底部区域样式 ========== */
-        .footer-text {
-            text-align: center;
-            margin: 30px 0 10px;
-            font-size: 28px;
-            font-weight: bold;
-            color: #000;
-            /* 优化：文字抗锯齿 */
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-        /* 新增：制作详情信息按钮样式 */
-        .detail-info-btn {
-            display: block;
-            margin: 0 auto;
-            background-color: #1a73e8;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            padding: 15px 40px;
-            font-size: 24px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(26, 115, 232, 0.2);
-        }
-        .detail-info-btn:hover {
-            background-color: #1557b0;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 8px rgba(26, 115, 232, 0.3);
-        }
-        .detail-info-btn:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 4px rgba(26, 115, 232, 0.2);
-        }
-        /* ========== 弹窗样式 ========== */
-        .download-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.2s ease;
-            /* 优化：防止弹窗内内容溢出 */
-            overflow-y: auto;
-        }
-        .modal-content {
-            background: white;
-            padding: 40px;
-            border-radius: 10px;
-            text-align: center;
-            min-width: 500px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-            transform: scale(0.8);
-            transition: transform 0.2s ease;
-            /* 优化：增加内边距适配 */
-            box-sizing: border-box;
-            position: relative;
-        }
-        .download-modal.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        .download-modal.active .modal-content {
-            transform: scale(1);
-        }
-        .modal-title {
-            font-size: 32px;
-            font-weight: bold;
-            margin-bottom: 30px;
-            color: #000;
-            /* 优化：文字抗锯齿 */
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-        .modal-btn {
-            padding: 15px 40px;
-            font-size: 24px;
-            border: none;
-            border-radius: 6px;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            /* 优化：按钮阴影 */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        /* 优化：按钮hover上浮效果 */
-        .modal-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-        }
-        /* 优化：按钮点击反馈 */
-        .modal-btn:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        .yunpan-btn {
-            background-color: #1a73e8;
-        }
-        .yunpan-btn:hover {
-            background-color: #1557b0;
-        }
-        .direct-btn {
-            background-color: #ff6b00;
-        }
-        .direct-btn:hover {
-            background-color: #e05a00;
-        }
-        /* 详情弹窗关闭按钮样式 */
-        .close-detail-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: none;
-            background: #e74c3c;
-            color: #fff;
-            font-size: 22px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s ease;
-        }
-        .close-detail-btn:hover {
-            background: #c0392c;
-            transform: scale(1.08);
-        }
-        /* 新增：漂浮提示文字样式 */
-        .float-tip {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 20px 40px;
-            border-radius: 8px;
-            font-size: 24px;
-            z-index: 10000;
-            opacity: 0;
-            animation: floatTipAnimation 2s ease-in-out;
+
+        /* 光泽扫过效果 */
+        .game-item::after {
+            content: ''; position: absolute; top: 0; left: -100%;
+            width: 60%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
             pointer-events: none;
         }
-        /* 新增：漂浮提示动画 */
-        @keyframes floatTipAnimation {
-            0% { opacity: 0; transform: translate(-50%, -60%); }
-            20% { opacity: 1; transform: translate(-50%, -50%); }
-            80% { opacity: 1; transform: translate(-50%, -50%); }
-            100% { opacity: 0; transform: translate(-50%, -40%); }
+        .game-item:hover::after { animation: shimmer 0.8s ease forwards; }
+
+        .game-info { display: flex; align-items: center; gap: 20px; }
+
+        .game-icon-wrapper {
+            width: 80px; height: 80px; border-radius: var(--radius-sm);
+            overflow: hidden; background: #1a1a1a; flex-shrink: 0;
+            border: 2px solid rgba(255,255,255,0.3);
         }
-        /* 新增：详情信息弹窗样式（复用下载弹窗基础样式） */
-        .detail-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.2s ease;
-            overflow-y: auto;
+        .game-icon-img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: transform var(--transition-normal);
         }
-        .detail-modal.active {
-            opacity: 1;
-            visibility: visible;
+        .game-item:hover .game-icon-img { transform: scale(1.15); }
+
+        .game-text h3 { font-size: 28px; margin-bottom: 10px; }
+        .game-details { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .game-size { font-size: 20px; color: var(--color-text-sub); font-weight: 600; }
+
+        /* 彩色胶囊标签 */
+        .game-tag {
+            display: inline-block; padding: 3px 12px;
+            font-size: 14px; font-weight: 600; border-radius: 20px;
+            color: var(--color-white); letter-spacing: 1px;
         }
-        .detail-modal.active .modal-content {
-            transform: scale(1);
+        .tag-adventure { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .tag-puzzle    { background: linear-gradient(135deg, #f093fb, #f5576c); }
+        .tag-sandbox   { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+        .tag-casual    { background: linear-gradient(135deg, #43e97b, #38f9d7); color: #1a5c2e; }
+
+        /* ================================================================
+           七、按钮系统
+           ================================================================ */
+        .download-btn {
+            background: linear-gradient(135deg, var(--color-success), #34d058);
+            color: var(--color-white); border: none; border-radius: var(--radius-md);
+            padding: 16px 32px; font-size: 26px; font-weight: bold;
+            display: flex; align-items: center; gap: 10px;
+            cursor: pointer; white-space: nowrap; flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(40,167,69,0.3);
+            transition: all var(--transition-normal);
         }
+        .download-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(40,167,69,0.4); }
+        .download-btn:active { transform: translateY(-1px); }
+
+        .download-icon {
+            width: 32px; height: 32px; border: 2px solid var(--color-white);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px;
+        }
+
+        .modal-btn {
+            width: 100%; padding: 16px 24px; font-size: 22px; font-weight: 600;
+            border: none; border-radius: 14px; color: var(--color-white);
+            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;
+            box-shadow: var(--shadow-sm); transition: all var(--transition-normal);
+        }
+        .modal-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
+        .yunpan-btn { background: linear-gradient(135deg, #1a73e8, #4a9af5); }
+        .direct-btn { background: linear-gradient(135deg, #ff6b00, #ff9a44); }
+
+        .detail-info-btn {
+            display: block; margin: 0 auto;
+            background: linear-gradient(135deg, var(--color-primary), #4a9af5);
+            color: var(--color-white); border: none; border-radius: var(--radius-md);
+            padding: 16px 44px; font-size: 24px; font-weight: bold;
+            cursor: pointer; position: relative; overflow: hidden;
+            box-shadow: 0 4px 12px rgba(26,115,232,0.3);
+            transition: all var(--transition-normal);
+        }
+        .detail-info-btn::after {
+            content: ''; position: absolute; top: 0; left: -100%;
+            width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+        }
+        .detail-info-btn:hover::after { animation: shimmer 0.8s ease forwards; }
+        .detail-info-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(26,115,232,0.4); }
+
+        /* ================================================================
+           八、弹窗系统
+           ================================================================ */
+        .modal-overlay {
+            position: fixed; inset: 0; z-index: 9999;
+            background: rgba(0,0,0,0.55); backdrop-filter: blur(6px);
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; visibility: hidden;
+            transition: opacity 0.35s ease, visibility 0.35s ease;
+            padding: 20px; overflow-y: auto;
+        }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+
+        .modal-content {
+            background: var(--color-white); padding: 44px 40px 36px;
+            border-radius: var(--radius-xl); text-align: center;
+            min-width: 480px; max-width: 90vw; max-height: 85vh; overflow-y: auto;
+            box-shadow: var(--shadow-modal); position: relative;
+            transform: scale(0.85) translateY(24px); opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        .modal-overlay.active .modal-content {
+            transform: scale(1) translateY(0); opacity: 1;
+            transition: transform 0.45s var(--ease-out), opacity 0.35s ease;
+        }
+        /* 顶部装饰线 */
+        .modal-content::before {
+            content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+            width: 60px; height: 4px; border-radius: 0 0 4px 4px;
+            background: linear-gradient(90deg, var(--color-primary), #7b2cb3);
+        }
+
+        .modal-close-btn {
+            position: absolute; top: 14px; right: 14px;
+            width: 36px; height: 36px; border-radius: 50%; border: none;
+            background: #f0f0f0; color: #666; font-size: 18px;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: all var(--transition-fast); z-index: 10;
+        }
+        .modal-close-btn:hover { background: var(--color-danger); color: #fff; transform: rotate(90deg) scale(1.1); }
+
+        .modal-icon {
+            width: 64px; height: 64px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-size: 28px;
+            margin: 0 auto 20px; opacity: 0; transform: scale(0.5);
+            transition: all 0.4s var(--ease-out) 0.1s;
+        }
+        .modal-overlay.active .modal-icon { opacity: 1; transform: scale(1); }
+        .modal-icon--download { background: var(--color-success-light); color: var(--color-success); }
+        .modal-icon--info { background: var(--color-primary-light); color: var(--color-primary); }
+
+        .modal-title { font-size: 26px; font-weight: bold; margin-bottom: 8px; padding-right: 36px; }
+        .modal-subtitle { font-size: 15px; color: var(--color-text-muted); margin-bottom: 28px; }
+        .modal-actions { display: flex; flex-direction: column; gap: 12px; }
+        .modal-actions-divider {
+            display: flex; align-items: center; gap: 12px;
+            color: var(--color-text-muted); font-size: 13px;
+        }
+        .modal-actions-divider::before, .modal-actions-divider::after {
+            content: ''; flex: 1; height: 1px; background: #eee;
+        }
+
+        /* 详情内容区 */
         .detail-content {
-            font-size: 20px;
-            line-height: 1.8;
-            text-align: left;
-            color: #333;
+            text-align: left; max-height: 50vh; overflow-y: auto; padding-right: 8px;
+            scrollbar-width: thin; scrollbar-color: #ccc transparent;
         }
-        /* ========== 响应式适配（移动端） ========== */
-        @media (max-width: 768px) {
-            .header {
-                flex-direction: column;
-                gap: 20px;
-            }
-            .header-title {
-                font-size: 40px;
-                letter-spacing: 5px;
-            }
-            .logo-img {
-                width: 80px;
-                height: 80px;
-            }
-            /* 下拉模块移动端适配 */
-            .intro-toggle-btn {
-                font-size: 20px;
-                padding: 12px;
-            }
-            .site-intro-text {
-                font-size: 18px;
-                padding: 15px;
-            }
-            .game-item {
-                flex-direction: column;
-                gap: 20px;
-                padding: 15px;
-            }
-            .game-info {
-                flex-direction: column;
-                text-align: center;
-            }
-            .game-text h3 {
-                font-size: 22px;
-            }
-            .game-details {
-                font-size: 18px;
-            }
-            .download-btn {
-                width: 100%;
-                justify-content: center;
-                padding: 15px;
-                font-size: 22px;
-            }
-            .modal-content {
-                min-width: 90%;
-                padding: 20px;
-            }
-            .modal-title {
-                font-size: 24px;
-            }
-            .modal-btn {
-                display: block;
-                width: 100%;
-                margin: 10px 0;
-                padding: 12px;
-                font-size: 20px;
-            }
-            .footer-text {
-                font-size: 20px;
-            }
-            .detail-info-btn {
-                font-size: 20px;
-                padding: 12px 30px;
-                width: 100%;
-            }
-            .float-tip {
-                font-size: 18px;
-                padding: 15px 30px;
-            }
-            .detail-content {
-                font-size: 18px;
-            }
-            .close-detail-btn {
-                width: 34px;
-                height: 34px;
-                font-size: 18px;
-            }
+        .detail-content::-webkit-scrollbar { width: 5px; }
+        .detail-content::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+        .detail-content dl { margin-bottom: 16px; }
+        .detail-content dt {
+            font-weight: 700; font-size: 15px; color: var(--color-primary);
+            margin-top: 16px; margin-bottom: 8px; padding: 5px 14px;
+            background: var(--color-primary-light); border-radius: 6px; display: inline-block;
         }
-        /* ========== 辅助样式 ========== */
-        /* 优化：图片加载失败时的占位样式 */
-        img[alt]::after {
-            content: attr(alt);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 100%;
-            background: #f5f5;
-            color: #666;
-            border: 1px dashed #ccc;
+        .detail-content dl:first-child dt:first-child { margin-top: 0; }
+        .detail-content dd {
+            padding: 6px 12px; font-size: 16px; color: var(--color-text-sub);
+            line-height: 1.7; border-radius: var(--radius-sm);
+            transition: background var(--transition-fast);
+        }
+        .detail-content dd:hover { background: #f8f8f8; }
+        .detail-divider { height: 1px; background: #eee; margin: 20px 0; border: none; }
+
+        /* ================================================================
+           九、Toast 提示 & 底部 & 兜底
+           ================================================================ */
+        .float-tip {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.85); color: #fff; padding: 20px 40px;
+            border-radius: var(--radius-md); font-size: 24px; z-index: 10000;
+            opacity: 0; animation: floatTipAnimation 2.5s ease-in-out forwards;
+            pointer-events: none; backdrop-filter: blur(4px);
+        }
+        @keyframes floatTipAnimation {
+            0%   { opacity: 0; transform: translate(-50%, -60%) scale(0.9); }
+            15%  { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            80%  { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -40%) scale(0.95); }
+        }
+
+        .footer-text {
+            text-align: center; margin: 36px 0 16px;
+            font-size: 26px; font-weight: bold;
+            display: flex; align-items: center; gap: 16px;
+        }
+        .footer-text::before, .footer-text::after {
+            content: ''; flex: 1; height: 2px; border-radius: 1px;
+        }
+        .footer-text::before { background: linear-gradient(90deg, transparent, rgba(0,0,0,0.2)); }
+        .footer-text::after  { background: linear-gradient(90deg, rgba(0,0,0,0.2), transparent); }
+
+        body.modal-open { overflow: hidden; }
+        
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.05); }
+        ::-webkit-scrollbar-thumb { background: rgba(123,44,179,0.3); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(123,44,179,0.5); }
+
+        /* 极窄屏幕安全断点 */
+        @media (max-width: 320px) {
+            .container { padding: 0 5px; }
+            .game-item { padding: 15px 10px; }
         }
     </style>
 </head>
-<body>
+
+<!-- 🔒 oncontextmenu 禁止右键菜单 -->
+<body oncontextmenu="return false;">
+
     <div class="container">
-        <!-- 顶部标题区域 -->
-        <div class="header">
-            <!-- 网站LOGO -->
-            <img src="网站LOGO.png" class="logo-img" alt="黑娃游戏站LOGO" loading="lazy">
+        <!-- 头部 -->
+        <header class="header animate-entry delay-1">
+            <div class="logo-wrapper">
+                <img src="网站LOGO.png" class="logo-img" alt="黑娃游戏站LOGO" loading="eager">
+            </div>
             <h1 class="header-title">黑 娃 游 戏 站</h1>
-        </div>
-        <!-- 【默认添加active实现页面加载自动展开】 -->
-        <div class="intro-collapse-wrap active" id="introWrap">
-            <button class="intro-toggle-btn" id="introBtn">
+        </header>
+
+        <!-- 折叠介绍 -->
+        <div class="intro-collapse-wrap active animate-entry delay-2" id="introWrap">
+            <button class="intro-toggle-btn" id="introBtn" aria-expanded="true" aria-controls="introContent">
                 网站介绍
-                <span class="arrow-icon">▼</span>
+                <span class="arrow-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
+                </span>
             </button>
-            <div class="site-intro-box">
+            <div class="site-intro-box" id="introContent" role="region">
                 <div class="site-intro-text">
                     黑娃游戏站，专门提供任何稀缺的游戏资源，让大家方便下载。还能通过联系作者说明需要的文件，作者会挨个认真收看每一条评论并尽力去弄到！希望得到大家的支持，谢谢！
                 </div>
             </div>
         </div>
-        <!-- 游戏列表区域 -->
-        <div class="game-list-container">
-            <div class="list-header">
-                <h2>游戏列表</h2>
+
+        <!-- 游戏列表 -->
+        <main class="animate-entry delay-3">
+            <div class="game-list-container">
+                <div class="list-header"><h2>🎮 游戏列表</h2></div>
+                <div id="gameListMount"></div>
             </div>
-            <!-- 游戏条目1：小小梦魇2 -->
-            <div class="game-item">
-                <div class="game-info">
-                    <!-- 游戏图标（懒加载优化） -->
-                    <img src="游戏图标1.PNG" class="game-icon-img" alt="小小梦魇2图标" loading="lazy">
-                    <div class="game-text">
-                        <h3>1. 小小梦魇2 · 原版资源下载</h3>
-                        <div class="game-details">
-                            大小：3.6G &nbsp;&nbsp;【动作冒险】【解密游戏】
-                        </div>
-                    </div>
-                </div>
-                <button class="download-btn" data-game="game1">
-                    <span class="download-icon">↓</span>
-                    本地下载
-                </button>
-            </div>
-            <!-- 游戏条目2：PC迷你世界0.44.2版本 -->
-            <div class="game-item">
-                <div class="game-info">
-                    <img src="游戏图标2.PNG" class="game-icon-img" alt="迷你世界图标" loading="lazy">
-                    <div class="game-text">
-                        <h3>2. 【PC】迷你世界0.44.2版本</h3>
-                        <div class="game-details">
-                            大小：440M &nbsp;&nbsp;【沙盒创造】【休闲益智】
-                        </div>
-                    </div>
-                </div>
-                <button class="download-btn" data-game="game2">
-                    <span class="download-icon">↓</span>
-                    本地下载
-                </button>
-            </div>
-            <!-- 游戏条目3：PC迷你世界0.52.1版本 -->
-            <div class="game-item">
-                <div class="game-info">
-                    <img src="游戏图标3.PNG" class="game-icon-img" alt="迷你世界0.52.1图标" loading="lazy">
-                    <div class="game-text">
-                        <h3>3. 【PC】迷你世界0.52.1版本</h3>
-                        <div class="game-details">
-                            大小：505M &nbsp;&nbsp;【休闲游戏】【沙盒游戏】
-                        </div>
-                    </div>
-                </div>
-                <button class="download-btn" data-game="game3">
-                    <span class="download-icon">↓</span>
-                    本地下载
-                </button>
-            </div>
-            <!-- 新增游戏条目4：【安卓】迷你世界0.44.2版本 -->
-            <div class="game-item">
-                <div class="game-info">
-                    <img src="游戏图标2.PNG" class="game-icon-img" alt="迷你世界安卓0.44.2图标" loading="lazy">
-                    <div class="game-text">
-                        <h3>4. 【安卓】迷你世界0.44.2版本</h3>
-                        <div class="game-details">
-                            大小：290M &nbsp;&nbsp;【沙盒创造】【休闲益智】
-                        </div>
-                    </div>
-                </div>
-                <button class="download-btn" data-game="game4">
-                    <span class="download-icon">↓</span>
-                    本地下载
-                </button>
-            </div>
-            <!-- 新增游戏条目5：【安卓】迷你世界0.52.1版本 -->
-            <div class="game-item">
-                <div class="game-info">
-                    <img src="游戏图标3.PNG" class="game-icon-img" alt="迷你世界安卓0.52.1图标" loading="lazy">
-                    <div class="game-text">
-                        <h3>5. 【安卓】迷你世界0.52.1版本</h3>
-                        <div class="game-details">
-                            大小：460M &nbsp;&nbsp;【休闲游戏】【沙盒游戏】
-                        </div>
-                    </div>
-                </div>
-                <button class="download-btn" data-game="game5">
-                    <span class="download-icon">↓</span>
-                    本地下载
-                </button>
-            </div>
-        </div>
-        <!-- 底部提示文字 -->
-        <div class="footer-text">
-            ————————更多游戏待更新，敬请期待！————————
-        </div>
-        <!-- 替换原有联系方式为详情信息按钮 -->
-        <button class="detail-info-btn" id="detailInfoBtn">制作详情信息</button>
+        </main>
+
+        <!-- 底部 -->
+        <footer class="animate-entry delay-4">
+            <div class="footer-text">更多游戏待更新，敬请期待！</div>
+            <button class="detail-info-btn" id="detailInfoBtn" aria-label="查看制作详情信息">制作详情信息</button>
+        </footer>
     </div>
-    <!-- 下载方式弹窗（默认隐藏） -->
-    <div id="downloadModal" class="download-modal">
-        <div class="modal-content">
+
+    <!-- 下载弹窗 -->
+    <div id="downloadModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal-content" tabindex="-1">
+            <button class="modal-close-btn" id="closeDownloadBtn" aria-label="关闭">×</button>
+            <div class="modal-icon modal-icon--download" aria-hidden="true">⬇</div>
             <div class="modal-title" id="modalTitle">选择下载的方式</div>
-            <button class="modal-btn yunpan-btn" id="gameYunpanBtn">123云盘下载</button>
-            <button class="modal-btn direct-btn" id="gameDirectBtn">直链下载</button>
-        </div>
-    </div>
-    <!-- 新增：详情信息弹窗（添加右上角关闭按钮） -->
-    <div id="detailModal" class="detail-modal">
-        <div class="modal-content">
-            <button class="close-detail-btn" onclick="closeDetailModal()">×</button>
-            <div class="modal-title">《黑娃游戏站》制作详情信息</div>
-            <div class="detail-content">
-                <p>-目前网站版本：1.5；</p>
-                <p>-网站发布日期：2026.5.8；</p>
-                <p>-网站更新日期：2026.7.2；</p>
-                <p>-本次更新内容：全面优化网页的UI界面，添加了多元素的动画效果，网站介绍可以隐藏等功能，确保网页整体更简洁，增加用户体验！新增【安卓】迷你世界0.44.2、【安卓】迷你世界0.52.1版本；</p>
-                <p>-作者网名：黑娃！；</p>
-                <p>-联系方式：</p>
-                <p>-QQ号：3868093996；</p>
-                <p>-快手号：heiwa126126.</p>
-                <p>-[手机版访问该网站的设备，如果页面布局有些乱，建议您通过浏览器设置访问电脑版的网页。若有新的想法和建议，欢迎联系作者，作者25小时在线！]</p>
+            <div class="modal-subtitle">请选择您偏好的下载渠道</div>
+            <div class="modal-actions">
+                <button class="modal-btn yunpan-btn" id="gameYunpanBtn">☁️ 123云盘下载</button>
+                <div class="modal-actions-divider">或</div>
+                <button class="modal-btn direct-btn" id="gameDirectBtn">🔗 直链下载</button>
             </div>
         </div>
     </div>
+
+    <!-- 详情弹窗 -->
+    <div id="detailModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="detailModalTitle">
+        <div class="modal-content" tabindex="-1">
+            <button class="modal-close-btn" id="closeDetailBtn" aria-label="关闭">×</button>
+            <div class="modal-icon modal-icon--info" aria-hidden="true">📋</div>
+            <div class="modal-title" id="detailModalTitle">《黑娃游戏站》制作详情</div>
+            <div class="modal-subtitle">网站版本 1.6 · 更新于 2026.8.27</div>
+            <!-- ✅ detail-content 内的 dd 已设置为 user-select: text，允许复制联系方式 -->
+            <div class="detail-content">
+                <dl>
+                    <dt>📌 基本信息</dt>
+                    <dd>网站版本：1.6</dd>
+                    <dd>发布日期：2026.5.8</dd>
+                    <dd>更新日期：2026.8.27</dd>
+                    <dd>本次更新：全面优化网站中的所有资源，确保网站中的资源是最新版本</dd>
+                </dl>
+                <hr class="detail-divider">
+                <dl>
+                    <dt>👤 作者信息</dt>
+                    <dd class="copyable">作者网名：黑娃！</dd>
+                    <dd class="copyable">QQ号：3868093996</dd>
+                    <dd class="copyable">快手号：heiwa126126.</dd>
+                </dl>
+                <hr class="detail-divider">
+                <dl>
+                    <dt>❓ 问题及解答</dt>
+                    <dd>1. 手机版访问该网站的设备，如果页面布局有些乱，建议您通过浏览器设置访问电脑版的网页。</dd>
+                    <dd>2. 本网站的所有直链下载均有效，初次选择直链下载可能需要加载直链一段时间，大概1-3分钟内加载完成。</dd>
+                    <dd>若有新的问题或者好的建议，欢迎联系作者，作者25H在线！</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // ========== 全局配置 ==========
-        // 游戏下载链接配置：统一管理所有游戏的下载链接和名称
-        const GAME_DOWNLOAD_CONFIG = {
-            game1: {
-                name: '小小梦魇2 · 原版资源',
+    /**
+     * 黑娃游戏站 - 核心逻辑
+     * 使用 IIFE 隔离作用域，避免全局污染
+     */
+    (function () {
+        'use strict';
+
+        // ==================== 1. 游戏数据配置 ====================
+        const GAMES = [
+            {
+                id: 'game1', name: '小小梦魇2 · 原版资源下载',
+                icon: '游戏图标1.PNG', alt: '小小梦魇2图标', size: '3.6G',
+                tags: [{ label: '动作冒险', cssClass: 'tag-adventure' }, { label: '解密游戏', cssClass: 'tag-puzzle' }],
                 yunpan: 'https://1859015095.share.123865.com/123pan/Gl4cvd-gradH?pwd=1256#',
-                direct: 'https://123-184-152-201-v2.pd1.cjjd19.com/user-share-pay-download-cdn.123295.com/123-927/3d2fbe18/1859015095-0/3d2fbe180bd2a7c02e9fe547f3f5cb9f/c-m9009?v=5&t=1782563078&r=8FSUTH&bzc=2&bzs=313835393031353039353a37343432393937303a333930383633343833353a313835393031353039353a32&ur=lmgumgvnigui&urn=0&s=17825630788ffe4205a370c1f32c6c27a00a88c684&bzp=0&bi=3847191329&filename=Little+Nightmares+II.zip&x-mf-biz-cid=cb074c66-0e74-4709-a0e1-4429ae3790fc-5baabb&auto_redirect=0&ndcp=1&cache_type=1'
+                direct: '', directDisabled: true
             },
-            game2: {
-                name: '【PC】迷你世界0.44.2版本',
-                yunpan: 'https://1859015095.share.123865.com/123pan/Gl4cvd-dhKdH?pwd=1257#',
-                direct: 'https://files.zohopublic.com.cn/public/workdrive-public/download/6ur1p37bfd56c40194bc2a430e2baf30d2e32?x-cli-msg=%7B%22linkId%22%3A%221Mwbf7o2fS9-3a4av%22%2C%22isFileOwner%22%3Afalse%2C%22version%22%3A%221.0%22%2C%22isWDSupport%22%3Afalse%7D'
+            {
+                id: 'game2', name: '【PC】迷你世界0.44.2版本',
+                icon: '游戏图标2.PNG', alt: '迷你世界图标', size: '550M',
+                tags: [{ label: '沙盒创造', cssClass: 'tag-sandbox' }, { label: '休闲益智', cssClass: 'tag-casual' }],
+                yunpan: 'https://1859015095.share.123pan.cn/123pan/Gl4cvd-eXO9H?pwd=1000#',
+                direct: 'https://download-accl.zoho.com/v1/workdrive/download/aj53z25a831b9703a4934af7c58ac6e86346a?x-cli-msg=%7B%22isFileOwner%22%3Atrue%2C%22version%22%3A%221.0%22%2C%22isWDSupport%22%3Afalse%7D'
             },
-            game3: {
-                name: '【PC】迷你世界0.52.1版本',
-                yunpan: 'https://1859015095.share.123865.com/123pan/Gl4cvd-WEB3H?pwd=1258#',
-                direct: 'https://files.zohopublic.com.cn/public/workdrive-public/download/27xz8c876e825ada84b029929f0ba757a83e1?x-cli-msg=%7B%22linkId%22%3A%221Mwbf7o2hqV-3a4av%22%2C%22isFileOwner%22%3Afalse%2C%22version%22%3A%221.0%22%2C%22isWDSupport%22%3Afalse%7D'
+            {
+                id: 'game3', name: '【PC】迷你世界0.52.1版本',
+                icon: '游戏图标3.PNG', alt: '迷你世界0.52.1图标', size: '490M',
+                tags: [{ label: '休闲游戏', cssClass: 'tag-casual' }, { label: '沙盒游戏', cssClass: 'tag-sandbox' }],
+                yunpan: 'https://1859015095.share.123pan.cn/123pan/Gl4cvd-kh19H?pwd=1001#',
+                direct: 'https://download-accl.zoho.com/v1/workdrive/download/aj53zcff8423b33dd48cf88372eeb2bb8cf09?x-cli-msg=%7B%22isFileOwner%22%3Atrue%2C%22version%22%3A%221.0%22%2C%22isWDSupport%22%3Afalse%7D'
             },
-            // 新增安卓0.44.2配置
-            game4: {
-                name: '【安卓】迷你世界0.44.2版本',
-                yunpan: 'https://1859015095.share.123pan.cn/123pan/Gl4cvd-KC33H?pwd=1259#',
-                direct: 'https://files.zohopublic.com.cn/public/workdrive-public/download/27xz85a24f75ef19f43ff9152177ca34612fa?x-cli-msg=%7B%22linkId%22%3A%221Mwbf7o2kiw-3a4av%22%2C%22isFileOwner%22%3Afalse%2C%22version%22%3A%221.0%22%2C%22isWDSupport%22%3Afalse%7D'
+            {
+                id: 'game4', name: '【安卓】迷你世界0.44.2版本',
+                icon: '游戏图标2.PNG', alt: '迷你世界安卓0.44.2图标', size: '480M',
+                tags: [{ label: '沙盒创造', cssClass: 'tag-sandbox' }, { label: '休闲益智', cssClass: 'tag-casual' }],
+                yunpan: 'https://1859015095.share.123pan.cn/123pan/Gl4cvd-XLOQH?pwd=1002#',
+                direct: 'https://download-accl.zoho.com/v1/workdrive/download/aj53z898fba1d5c5d4424b9fbbee3d2ad0029?x-cli-msg=%7B%22isFileOwner%22%3Atrue%2C%22version%22%3A%221.0%22%2C%22isWDSupport%22%3Afalse%7D'
             },
-            // 新增安卓0.52.1配置
-            game5: {
-                name: '【安卓】迷你世界0.52.1版本',
-                yunpan: 'https://1859015095.share.123pan.cn/123pan/Gl4cvd-7QKdH?pwd=1260#',
-                direct: 'https://b.afsdown.com/big1/minishijie_v0.52.1_rsghr_anfensi.com.apk?auth_key=1782999436-18kxahm3STd9hMv8-0-e088bc6f81e6ec45f186b15ef53027d8'
+            {
+                id: 'game5', name: '【安卓】迷你世界0.52.1版本',
+                icon: '游戏图标3.PNG', alt: '迷你世界安卓0.52.1图标', size: '500M',
+                tags: [{ label: '休闲游戏', cssClass: 'tag-casual' }, { label: '沙盒游戏', cssClass: 'tag-sandbox' }],
+                yunpan: 'https://1859015095.share.123pan.cn/123pan/Gl4cvd-tKUQH?pwd=1003#',
+                direct: 'https://download-accl.zoho.com/v1/workdrive/download/aj53z9b247180848a48a892934c06ae00aaa4?x-cli-msg=%7B%22isFileOwner%22%3Atrue%2C%22version%22%3A%221.0%22%2C%22isWDSupport%22%3Afalse%7D'
             }
-        };
-        // ========== DOM元素缓存 ==========
+        ];
+
+        // 图片加载失败兜底 SVG
+        const FALLBACK_IMG = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iNDAiIGN5PSI0MCIgcj0iNDAiIGZpbGw9IiNGRkY5MDAiLz4KPHBhdGggZD0iTTQwIDI1QzMwLjc0NSAyNSAyMyAzMi43NDUgMjMgNDNDMjMgNTMuMjU1IDMwLjc0NSA2MSA0MCA2MUM0OS4yNTUgNjEgNTcgNTMuMjU1IDU3IDQzQzU3IDMyLjc0NSA0OS4yNTUgMjUgNDAgMjVaIiBmaWxsPSIjNzc3Ii8+CjxwYXRoIGQ9Ik00MCAzNUM0NC40MTggMzUgNDggMzguNTgyIDQ4IDQzQzQ4IDQ3LjQxOCA0NC40MTggNTEgNDAgNTFDMzUuNTgyIDUxIDMyIDQ3LjQxOCAzMiA0M0MzMiAzOC41ODIgMzUuNTgyIDM1IDQwIDM1WiIgZmlsbD0iIzUwNSIvPgo8L3N2Zz4=';
+
+        // ==================== 2. DOM 缓存 ====================
         const DOM = {
             downloadModal: document.getElementById('downloadModal'),
+            closeDownloadBtn: document.getElementById('closeDownloadBtn'),
             modalTitle: document.getElementById('modalTitle'),
-            gameYunpanBtn: document.getElementById('gameYunpanBtn'),
-            gameDirectBtn: document.getElementById('gameDirectBtn'),
-            downloadBtns: document.querySelectorAll('.download-btn'),
-            // 新增：详情信息弹窗相关元素
+            yunpanBtn: document.getElementById('gameYunpanBtn'),
+            directBtn: document.getElementById('gameDirectBtn'),
             detailModal: document.getElementById('detailModal'),
+            closeDetailBtn: document.getElementById('closeDetailBtn'),
             detailInfoBtn: document.getElementById('detailInfoBtn'),
-            // 新增：网站下拉介绍元素
             introWrap: document.getElementById('introWrap'),
-            introBtn: document.getElementById('introBtn')
+            introBtn: document.getElementById('introBtn'),
+            gameListMount: document.getElementById('gameListMount')
         };
-        // ========== 工具函数 ==========
-        /**
-         * 显示下载弹窗并绑定对应游戏的下载链接
-         * @param {string} gameKey - 游戏标识（game1/game2/game3/game4/game5）
-         */
-        function showDownloadModal(gameKey) {
-            // 验证游戏配置是否存在
-            if (!GAME_DOWNLOAD_CONFIG[gameKey]) {
-                alert('该游戏的下载链接暂未配置！');
+
+        // ==================== 3. 等比缩放系统 ====================
+        const DESKTOP_BASE_WIDTH = 1100;
+
+        function applyUniformScale() {
+            const vw = window.innerWidth;
+            if (vw >= DESKTOP_BASE_WIDTH) {
+                document.body.style.zoom = '';
+                document.body.style.transform = '';
+                document.body.style.width = '';
                 return;
             }
-            const gameConfig = GAME_DOWNLOAD_CONFIG[gameKey];
-            
-            // 动态更新弹窗标题
-            DOM.modalTitle.textContent = `选择“${gameConfig.name}”的下载方式`;
-            
-            // 绑定云盘下载按钮事件
-            DOM.gameYunpanBtn.onclick = () => openDownloadLink(gameConfig.yunpan);
-            
-            // 判断是否为第一个游戏（game1）
-            if (gameKey === 'game1') {
-                // 移除第一个游戏直链的原有事件，替换为漂浮提示
-                DOM.gameDirectBtn.onclick = function() {
-                    showFloatTip('由于该资源过大，作者还在更新中，请使用123云盘下载');
-                };
+            const scale = Math.round((vw / DESKTOP_BASE_WIDTH) * 10000) / 10000;
+            if (typeof document.body.style.zoom !== 'undefined') {
+                document.body.style.zoom = scale;
             } else {
-                // 其余所有游戏（2/3/4/5）正常绑定直链下载
-                DOM.gameDirectBtn.onclick = () => openDownloadLink(gameConfig.direct);
+                document.body.style.transformOrigin = 'top left';
+                document.body.style.transform = `scale(${scale})`;
+                document.body.style.width = `${DESKTOP_BASE_WIDTH}px`;
             }
+        }
+
+        let resizeRaf = null;
+        function onResize() {
+            if (resizeRaf) cancelAnimationFrame(resizeRaf);
+            resizeRaf = requestAnimationFrame(applyUniformScale);
+        }
+
+        // ==================== 4. 🔒 内容保护系统 ====================
+        function setupContentProtection() {
+            // 禁止拖拽
+            document.addEventListener('dragstart', e => e.preventDefault());
+            // 禁止复制/剪切（但排除可编辑区域和详情弹窗中的联系方式）
+            document.addEventListener('copy', e => {
+                if (!e.target.closest('.copyable, .detail-content dd')) e.preventDefault();
+            });
+            document.addEventListener('cut', e => e.preventDefault());
             
-            // 显示弹窗
-            DOM.downloadModal.classList.add('active');
+            // 键盘快捷键拦截
+            document.addEventListener('keydown', e => {
+                const blocked = ['c', 'a', 's', 'u'];
+                // 放行 ESC 和 Tab（保证弹窗可用性）
+                if (e.key === 'Escape' || e.key === 'Tab') return;
+                // 拦截 Ctrl/Meta + 被禁按键
+                if ((e.ctrlKey || e.metaKey) && blocked.includes(e.key.toLowerCase())) {
+                    // 如果在可复制区域内则放行
+                    if (document.activeElement?.closest('.copyable, .detail-content dd')) return;
+                    e.preventDefault();
+                }
+                // 基础拦截 F12（仅辅助防护）
+                if (e.key === 'F12') e.preventDefault();
+            });
         }
-        /**
-         * 关闭下载弹窗
-         */
-        function closeDownloadModal() {
-            DOM.downloadModal.classList.remove('active');
-            // 清空按钮事件绑定（优化：防止内存泄漏）
-            DOM.gameYunpanBtn.onclick = null;
-            DOM.gameDirectBtn.onclick = null;
+
+        // ==================== 5. 工具函数 ====================
+        function toggleModal(modal, show) {
+            modal.classList.toggle('active', show);
+            if (show) {
+                document.body.classList.add('modal-open');
+                setTimeout(() => modal.querySelector('.modal-content')?.focus(), 100);
+            } else if (!document.querySelector('.modal-overlay.active')) {
+                document.body.classList.remove('modal-open');
+            }
         }
-        /**
-         * 打开下载链接（新窗口）
-         * @param {string} url - 下载链接
-         */
-        function openDownloadLink(url) {
-            // 判断链接为空时提示未更新
+
+        function closeAllModals() {
+            toggleModal(DOM.downloadModal, false);
+            toggleModal(DOM.detailModal, false);
+            DOM.yunpanBtn.onclick = null;
+            DOM.directBtn.onclick = null;
+        }
+
+        function openLink(url) {
             if (!url || !url.startsWith('http')) {
                 showFloatTip('该版本资源暂未上传，敬请等待更新！');
                 return;
             }
-            
-            // 打开新窗口下载
-            const newWindow = window.open(url, '_blank');
-            
-            // 优化：处理弹窗被浏览器拦截
-            if (!newWindow) {
-                alert('下载窗口被浏览器拦截，请允许弹窗后重试！');
-            }
-            
-            // 关闭弹窗
-            closeDownloadModal();
+            const win = window.open(url, '_blank');
+            if (win) win.opener = null;
+            else alert('下载窗口被浏览器拦截，请允许弹窗后重试！');
+            closeAllModals();
         }
-        /**
-         * 新增：显示漂浮提示文字
-         * @param {string} text - 提示文字内容
-         */
+
         function showFloatTip(text) {
-            // 创建提示DOM
-            const tipElement = document.createElement('div');
-            tipElement.className = 'float-tip';
-            tipElement.textContent = text;
-            document.body.appendChild(tipElement);
-            // 2秒后自动删除
-            setTimeout(() => {
-                document.body.removeChild(tipElement);
-            }, 2000);
+            document.querySelector('.float-tip')?.remove();
+            const tip = document.createElement('div');
+            tip.className = 'float-tip';
+            tip.textContent = text;
+            document.body.appendChild(tip);
+            setTimeout(() => tip.remove(), 2600);
         }
-        /**
-         * 显示详情弹窗
-         */
-        function showDetailModal() {
-            DOM.detailModal.classList.add('active');
+
+        // ==================== 6. 渲染引擎 ====================
+        function renderGameItem(game, index) {
+            const tagsHtml = game.tags.map(t =>
+                `<span class="game-tag ${t.cssClass}">${t.label}</span>`
+            ).join('');
+
+            return `<div class="game-item">
+                <div class="game-info">
+                    <div class="game-icon-wrapper">
+                        <img src="${game.icon}" class="game-icon-img" alt="${game.alt}" loading="lazy">
+                    </div>
+                    <div class="game-text">
+                        <h3>${index}. ${game.name}</h3>
+                        <div class="game-details">
+                            <span class="game-size">📦 ${game.size}</span>${tagsHtml}
+                        </div>
+                    </div>
+                </div>
+                <button class="download-btn" data-game="${game.id}" aria-label="下载${game.name}">
+                    <span class="download-icon" aria-hidden="true">↓</span>本地下载
+                </button>
+            </div>`;
         }
-        /**
-         * 关闭详情弹窗
-         */
-        function closeDetailModal() {
-            DOM.detailModal.classList.remove('active');
+
+        function renderGameList() {
+            DOM.gameListMount.innerHTML = GAMES.map((g, i) => renderGameItem(g, i + 1)).join('');
         }
-        /**
-         * 新增：切换网站介绍展开/收起
-         */
+
+        // ==================== 7. 业务逻辑 ====================
+        function showDownloadModal(gameId) {
+            const game = GAMES.find(g => g.id === gameId);
+            if (!game) return alert('该游戏的下载链接暂未配置！');
+
+            DOM.modalTitle.textContent = `选择"${game.name}"的下载方式`;
+            DOM.yunpanBtn.onclick = () => openLink(game.yunpan);
+            DOM.directBtn.onclick = game.directDisabled
+                ? () => showFloatTip('由于该资源过大，作者还在更新中，请使用123云盘下载')
+                : () => openLink(game.direct);
+
+            toggleModal(DOM.downloadModal, true);
+        }
+
         function toggleIntroBox() {
-            DOM.introWrap.classList.toggle('active');
+            const isActive = DOM.introWrap.classList.toggle('active');
+            DOM.introBtn.setAttribute('aria-expanded', String(isActive));
         }
-        // ========== 事件绑定 ==========
-        function initEventListeners() {
-            // 网站介绍下拉点击事件
-            DOM.introBtn.addEventListener('click', toggleIntroBox);
-            // 所有下载按钮统一绑定点击
-            DOM.downloadBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const gameKey = this.dataset.game;
-                    showDownloadModal(gameKey);
-                });
-            });
-            // 点击遮罩关闭下载弹窗
-            DOM.downloadModal.addEventListener('click', function(e) {
-                if (e.target === this) closeDownloadModal();
-            });
-            // 点击遮罩关闭详情弹窗
-            DOM.detailModal.addEventListener('click', function(e) {
-                if (e.target === this) closeDetailModal();
-            });
-            // ESC一键关闭所有弹窗
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    closeDownloadModal();
-                    closeDetailModal();
-                }
-            });
-            // 详情按钮点击
-            DOM.detailInfoBtn.addEventListener('click', showDetailModal);
-        }
-        // ========== 页面初始化 ==========
-        function init() {
-            initEventListeners();
-            console.log('黑娃游戏站页面加载完成！');
-            // 图片加载失败兜底
+
+        function setupImageFallback() {
             document.querySelectorAll('img').forEach(img => {
-                img.addEventListener('error', function() {
-                    this.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iNDAiIGN5PSI0MCIgcj0iNDAiIGZpbGw9IiNGRkY5MDAiLz4KPHBhdGggZD0iTTQwIDI1QzMwLjc0NSAyNSAyMyAzMi43NDUgMjMgNDNDMjMgNTMuMjU1IDMwLjc0NSA2MSA0MCA2MUM0OS4yNTUgNjEgNTcgNTMuMjU1IDU3IDQzQzU3IDMyLjc0NSA0OS4yNTUgMjUgNDAgMjVaIiBmaWxsPSIjNzc3Ii8+CjxwYXRoIGQ9Ik00MCAzNUM0NC40MTggMzUgNDggMzguNTgyIDQ4IDQzQzQ4IDQ3LjQxOCA0NC40MTggNTEgNDAgNTFDMzUuNTgyIDUxIDMyIDQ3LjQxOCAzMiA0M0MzMiAzOC41ODIgMzUuNTgyIDM1IDQwIDM1WiIgZmlsbD0iIzUwNSIvPgo8L3N2Zz4=';
+                img.addEventListener('error', function handler() {
+                    this.removeEventListener('error', handler);
+                    this.src = FALLBACK_IMG;
                     this.alt = '图片加载失败';
                 });
             });
         }
-        // DOM加载完成执行初始化
+
+        // ==================== 8. 事件绑定 ====================
+        function bindEvents() {
+            DOM.introBtn.addEventListener('click', toggleIntroBox);
+            
+            // 事件委托处理游戏下载
+            DOM.gameListMount.addEventListener('click', e => {
+                const btn = e.target.closest('.download-btn');
+                if (btn) showDownloadModal(btn.dataset.game);
+            });
+
+            // 弹窗遮罩关闭
+            [DOM.downloadModal, DOM.detailModal].forEach(m =>
+                m.addEventListener('click', e => { if (e.target === m) closeAllModals(); })
+            );
+
+            // 关闭按钮
+            DOM.closeDownloadBtn.addEventListener('click', closeAllModals);
+            DOM.closeDetailBtn.addEventListener('click', closeAllModals);
+
+            // 详情按钮
+            DOM.detailInfoBtn.addEventListener('click', () => toggleModal(DOM.detailModal, true));
+
+            // ESC 关闭
+            document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllModals(); });
+
+            // 响应式缩放
+            window.addEventListener('resize', onResize);
+        }
+
+        // ==================== 9. 初始化入口 ====================
+        function init() {
+            applyUniformScale();
+            setupContentProtection();
+            renderGameList();
+            bindEvents();
+            setupImageFallback();
+            console.log('✅ 黑娃游戏站 v1.6 已就绪');
+        }
+
         window.addEventListener('DOMContentLoaded', init);
-        // 全局错误捕获
-        window.addEventListener('error', function(e) {
-            console.error('页面异常：', e.message, e.filename, e.lineno);
-        });
+        window.addEventListener('error', e => console.error('页面异常：', e.message));
+    })();
     </script>
 </body>
 </html>
